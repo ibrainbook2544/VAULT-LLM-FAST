@@ -1,0 +1,113 @@
+{
+  "scanned": true,
+  "reminders": {
+    "VAULT-DIARY/SETUP-提醒系统.md": [
+      {
+        "title": "复习此卡片",
+        "time": "2026-05-16",
+        "rowNumber": 79
+      },
+      {
+        "title": "复习此卡片 # 同步更新",
+        "time": "2026-05-22",
+        "rowNumber": 106
+      }
+    ],
+    "VAULT-DIARY/2026-05-07 AI CMS Pipeline.md": [
+      {
+        "title": "复习此卡片",
+        "time": "2026-05-17",
+        "rowNumber": 118
+      }
+    ],
+    "VAULT-DIARY/2026-05-08 OB迁移日记方案.md": [
+      {
+        "title": "复习此卡片",
+        "time": "2026-05-16",
+        "rowNumber": 122
+      }
+    ],
+    "VAULT-DIARY/2026-05-08 文摘 ClawBot-OPC.md": [
+      {
+        "title": "复习此卡片",
+        "time": "2026-05-16",
+        "rowNumber": 48
+      }
+    ],
+    "VAULT-DIARY/2026-05-13 LLM-Wiki-v2 query顺序.md": [
+      {
+        "title": "复习此卡片",
+        "time": "2026-05-16",
+        "rowNumber": 36
+      }
+    ],
+    "VAULT-DIARY/2026-05-14 认知与学习质量的四维度.md": [
+      {
+        "title": "复习此卡片",
+        "time": "2026-05-16",
+        "rowNumber": 32
+      }
+    ],
+    "logs/2026-05-15.md": [
+      {
+        "title": "测试2",
+        "time": "2026-05-16 09:00",
+        "rowNumber": 8750
+      },
+      {
+        "title": "测试",
+        "time": "2026-05-16",
+        "rowNumber": 8749
+      },
+      {
+        "title": "复习此卡片",
+        "time": "2026-05-17",
+        "rowNumber": 8640
+      }
+    ],
+    "VAULT-DIARY/2026-05-16 OB插件reminder与tasks有什么区别？.md": [
+      {
+        "title": "OB Reminder与Tasks区别",
+        "time": "2026-05-16",
+        "rowNumber": 95
+      }
+    ],
+    "DIARY/SETUP-提醒系统.md": [
+      {
+        "title": "复习此卡片",
+        "time": "2026-05-16",
+        "rowNumber": 79
+      },
+      {
+        "title": "复习此卡片 # 同步更新",
+        "time": "2026-05-22",
+        "rowNumber": 106
+      }
+    ]
+  },
+  "debug": false,
+  "settings": {
+    "reminderTime": "12:00",
+    "reminderTimeStep": 15,
+    "laters": "In 30 minutes\nIn 1 hour\nIn 3 hours\nTomorrow\nNext week",
+    "useSystemNotification": true,
+    "autoCompleteTrigger": "(@",
+    "primaryReminderFormat": "ReminderPluginReminderFormat",
+    "enableReminderPluginReminderFormat": true,
+    "dateFormat": "YYYY-MM-DD",
+    "dateTimeFormat": "YYYY-MM-DD HH:mm",
+    "strictDateFormat": false,
+    "linkDatesToDailyNotes": false,
+    "enableTasksPluginReminderFormat": false,
+    "useCustomEmojiForTasksPlugin": false,
+    "removeTagsForTasksPlugin": false,
+    "enableKanbanPluginReminderFormat": false,
+    "yearMonthDisplayFormat": "YYYY, MMMM",
+    "monthDayDisplayFormat": "MM/DD",
+    "shortDateWithWeekdayDisplayFormat": "M/DD (ddd)",
+    "timeDisplayFormat": "HH:mm",
+    "editDetectionSec": 10,
+    "reminderCheckIntervalSec": 5,
+    "weekStart": "0"
+  }
+}

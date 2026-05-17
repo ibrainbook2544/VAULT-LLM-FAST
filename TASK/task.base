@@ -1,0 +1,85 @@
+filters:
+  and:
+    - file.folder == "TASK"
+    - note.type == "task"
+properties:
+  note.priority:
+    displayName: 优先级
+  note.status:
+    displayName: 状态
+  note.due:
+    displayName: 截止
+  note.created:
+    displayName: 创建
+  note.tags:
+    displayName: 标签
+views:
+  - type: table
+    name: 活跃任务
+    filters:
+      and:
+        - note.status != "done"
+        - note.status != "cancelled"
+    order:
+      - file.name
+      - priority
+      - status
+      - due
+    sort:
+      - property: priority
+        direction: DESC
+      - property: due
+        direction: ASC
+    columnSize:
+      note.priority: 97
+      note.due: 104
+  - type: table
+    name: 逾期
+    filters:
+      and:
+        - note.due < date(today())
+        - note.status != "done"
+        - note.status != "cancelled"
+    order:
+      - file.name
+      - priority
+      - due
+    sort:
+      - property: due
+        direction: ASC
+  - type: table
+    name: 本周截止
+    filters:
+      and:
+        - note.due >= date(today())
+        - note.due < date(today()) + 7
+        - note.status != "done"
+    order:
+      - file.name
+      - priority
+      - due
+    sort:
+      - property: due
+        direction: ASC
+  - type: table
+    name: 已完成
+    filters:
+      and:
+        - note.status == "done"
+    order:
+      - file.name
+      - created
+    sort:
+      - property: created
+        direction: DESC
+  - type: cards
+    name: 状态分组卡片
+    order:
+      - file.name
+      - status
+      - priority
+    sort:
+      - property: status
+        direction: ASC
+      - property: priority
+        direction: DESC

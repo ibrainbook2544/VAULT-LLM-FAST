@@ -1,0 +1,101 @@
+filters:
+  and:
+    - file.folder == "DIARY"
+    - note.type == "diary-atom"
+    - note.archived != true
+formulas:
+  due_today: note.next_review <= date(today())
+  overdue_days: date(today()) - note.next_review
+properties:
+  note.subtype:
+    displayName: 类型
+  note.importance:
+    displayName: 重要
+  note.review_count:
+    displayName: 次数
+  note.interval:
+    displayName: 间隔
+  note.next_review:
+    displayName: 下次复习
+  note.last_review:
+    displayName: 上次复习
+views:
+  - type: table
+    name: 今日复习
+    filters:
+      and:
+        - formula.due_today
+    order:
+      - file.name
+      - subtype
+      - importance
+      - review_count
+      - interval
+      - next_review
+    sort:
+      - property: importance
+        direction: DESC
+      - property: next_review
+        direction: ASC
+    columnSize:
+      file.name: 360
+      note.importance: 79
+      note.review_count: 62
+      note.interval: 61
+      note.next_review: 131
+  - type: table
+    name: 逾期
+    filters:
+      and:
+        - note.next_review < date(today())
+    order:
+      - file.name
+      - subtype
+      - importance
+      - next_review
+      - formula.overdue_days
+    sort:
+      - property: formula.overdue_days
+        direction: DESC
+  - type: table
+    name: 高价值低曝光
+    filters:
+      and:
+        - note.importance >= 4
+        - note.review_count < 3
+    order:
+      - file.name
+      - subtype
+      - importance
+      - review_count
+      - created
+    sort:
+      - property: review_count
+        direction: ASC
+      - property: importance
+        direction: DESC
+  - type: table
+    name: 新建未复习
+    filters:
+      and:
+        - note.review_count == 0
+    order:
+      - file.name
+      - subtype
+      - importance
+      - created
+    sort:
+      - property: created
+        direction: DESC
+  - type: cards
+    name: 全部 (按类型)
+    order:
+      - file.name
+      - subtype
+      - importance
+      - review_count
+    sort:
+      - property: subtype
+        direction: ASC
+      - property: importance
+        direction: DESC

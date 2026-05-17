@@ -1,0 +1,18 @@
+# OR only to exclude workspace cache
+.obsidian/workspace.json
+# to exclude workspace cache specific to mobile devices
+.obsidian/workspace-mobile.json
+
+#
+.obsidian/plugins/claudian/data.json
+.claudian/sessions
+
+#
+.env
+.trash/
+
+# conversation-logger
+.script/.conversation-logger-state/
+conversation-logs/
+logs/
+

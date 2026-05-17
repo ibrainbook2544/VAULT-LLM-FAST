@@ -1,0 +1,10 @@
+{
+  "openBehavior": "",
+  "newFileLocation": "folder",
+  "newFileFolderPath": "INBOX",
+  "attachmentFolderPath": "_attachment",
+  "useMarkdownLinks": false,
+  "alwaysUpdateLinks": true,
+  "showLineNumber": true,
+  "newLinkFormat": "shortest"
+}
