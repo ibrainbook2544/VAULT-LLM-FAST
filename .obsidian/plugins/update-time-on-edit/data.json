@@ -9,7 +9,8 @@
     "_attachment",
     "CLAUDE.md",
     "AGENTS.md",
-    "README.md"
+    "README.md",
+    "README.zh-CN"
   ],
   "ignoreCreatedFolder": [],
   "enableExperimentalHash": false,
@@ -129,6 +130,11 @@
     "_template/Todo Task.md": "c5399011aebd1e0988b7fddfa26b34f33221fa30508d3769ad577ca1b881b58e",
     "README.md": "315fcaaa2213d82519aa6682a5f4140efa0a60cc3bb45f16341d4fd58de0ac09",
     "DIARY/2026-05-14.md": "561f6a2010d58f55ce50399e37d0cb0f84a34d79cc0d7e1d8a2345c1cea417c2",
-    "INBOX/Todo/2026-05-15 AGENTS-CLAUDE skills化.md": "841ebf560183d595a6ff1278f87797da461e45be3ba598aed3c880fe20d9b0a2"
+    "INBOX/Todo/2026-05-15 AGENTS-CLAUDE skills化.md": "841ebf560183d595a6ff1278f87797da461e45be3ba598aed3c880fe20d9b0a2",
+    "DIARY/2026-05-07 AI CMS Pipeline.md": "73475b07ec71a68cf4c5e65aab627f3eecd9516e4e7b387940efb5c042861f07",
+    "logs/2026-05-17.md": "5bda8640e039cee0dd06a837a7e243ef3fb683ccf048bcd46fb0f1ac29229509",
+    "INBOX/Clippings/Lex-Fridman-视频笔记-全-.md": "b9139271cf8083f3612c447192d7427adfe975b45df434fdcdc6dbdb4199b5c0",
+    "INBOX/Clippings/OB 随手记同步方案.md": "6c8d41e67fcfe0984ae274d557f31f31e590568f0b4bee0826d6a312e716cd16",
+    "INBOX/Clippings/線性代數又名人工智慧數學基礎，你還覺得他沒用？.md": "cfae8c7c0e002a49354d4204307c8fc696ddc1685ebb1846c55c1545d6f08458"
   }
 }

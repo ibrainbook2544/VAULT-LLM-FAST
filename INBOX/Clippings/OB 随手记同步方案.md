@@ -7,8 +7,7 @@ created: 2026-05-09
 description: ChatGPT conversation with 20 messages
 tags:
   - clippings
-updated: 2026-05-16T16:37
-views: 0
+updated: 2026-05-17T15:12
 ---
 如何用OB实现随手记功能？方便手机同步OB
 

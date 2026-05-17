@@ -15,9 +15,9 @@ tags:
   - Pipeline
   - 架构
 sources: []
-updated: 2026-05-16T16:37
-views: 1
-last_visited: 2026-05-16
+updated: 2026-05-17T15:06
+views: 2
+last_visited: 2026-05-17
 ---
 
 # AI CMS Pipeline

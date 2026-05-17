@@ -14,34 +14,40 @@ const DWELL_MS = 30 * 1000;
 const EXCLUDE_FOLDERS = [
   "_template/",
   "_attachment/",
-  "VAULT-INBOX/_attachment/",
-  "VAULT-TODO/",
+  "logs/",
+  "INBOX/",
+  "TASK/",
 ];
 
 const EXCLUDE_PATH_CONTAINS = [
-  "/raw/",
-  "/logs/",
   "/_template/",
+  "/_attachment/",
+  "/logs/",
+  "/asset/",
+  "/raw/",
 ];
 
 const EXCLUDE_BASENAMES = new Set([
-  "index",
   "AGENTS",
   "CLAUDE",
+  "index",
+  "dashboard",
+  "README",
+  "README.zh-CN",
 ]);
 
 // 精确路径排除（整个文件名匹配）
 const EXCLUDE_EXACT_PATHS = new Set([
-  "VAULT-INBOX/Inbox.md",
+  "INBOX/Inbox.md",
 ]);
 
 function shouldSkip(file) {
   if (!file) return true;
   if (file.extension !== "md") return true;
-  if (EXCLUDE_EXACT_PATHS.has(file.path)) return true;
   if (EXCLUDE_FOLDERS.some(p => file.path.startsWith(p))) return true;
   if (EXCLUDE_PATH_CONTAINS.some(p => file.path.includes(p))) return true;
   if (EXCLUDE_BASENAMES.has(file.basename)) return true;
+  if (EXCLUDE_EXACT_PATHS.has(file.path)) return true;
   return false;
 }
 
@@ -66,7 +72,7 @@ app.workspace.on("file-open", (file) => {
     try {
       await app.fileManager.processFrontMatter(file, (fm) => {
         fm.views = (fm.views || 0) + 1;
-        fm.last_visited = window.moment().format("YYYY-MM-DD");
+        fm.last_visited = window.moment().format("YYYY-MM-DD HH:mm:ss");
       });
     } catch (e) {
       console.error("[view-counter]", file.path, e);

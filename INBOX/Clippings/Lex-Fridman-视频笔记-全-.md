@@ -8,9 +8,7 @@ created: 2026-05-14
 description: Lex Fridman 视频笔记（全） Cursor 团队访谈：人工智能驱动下的编程未来 🚀 概述 在本节课中，我们将一起学习 Cursor 团队在 Lex Fridman 播客中分享的关于人工智能如何改变编程未来的深刻见解。我们将探讨代码编辑器的演变、AI 辅助编程的核心技术、未来
 tags:
   - clippings
-updated: 2026-05-16T17:46
-views: 5
-last_visited: 2026-05-16
+updated: 2026-05-17T15:12
 ---
 ## Lex Fridman 视频笔记（全）
 

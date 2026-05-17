@@ -6,5 +6,6 @@
   "obsidian-reminder-plugin",
   "calendar",
   "templater-obsidian",
-  "quickadd"
+  "quickadd",
+  "update-time-on-edit"
 ]
