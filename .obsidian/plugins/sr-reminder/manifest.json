@@ -1,10 +1,10 @@
 {
-  "id": "claudian-sr-notifier",
-  "name": "Claudian SR Notifier",
-  "version": "1.0.0",
+  "id": "sr-reminder",
+  "name": "SR Reminder",
+  "version": "1.1.0",
   "minAppVersion": "1.0.0",
   "description": "基于 Obsidian 元数据缓存的间隔复习提醒器，零文件 IO，性能恒定支持上万张卡片",
   "author": "Claudian",
   "authorUrl": "",
-  "isDesktopOnly": false
+  "isDesktopOnly": true
 }

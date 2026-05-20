@@ -3,19 +3,18 @@ type: diary-atom
 subtype: 文摘
 created: 2026-05-18 15:39:34
 importance: 2
-sr_review_count: "2"
-sr_next_review_datetime: 2026-05-19 18:07:16
-promoted_to:
+sr_review_count: 3
+sr_next_review_datetime: 2026-05-19 22:04:54
 tags:
   - AI
   - CMS
   - Pipeline
   - 架构
 sources: []
-updated: 2026-05-19T17:52
-views: 25
-last_visited: 2026-05-19 17:46:47
-contentHash: 4469084e904adfda84c4a2fe28d959aa767e8adecfe3258d2f0d4bea1fce5ddb
+updated: 2026-05-19T20:59
+views: 31
+last_visited: 2026-05-19 22:08:47
+contentHash: f391f70d7829ed4b5c4d15ea5e9f65e51873da405c162d309da2c8b27e7bb4a0
 ---
 
 
@@ -43,9 +42,14 @@ for (const r of RATINGS) {
     btn.onmouseleave = () => btn.style.opacity = "1";
     btn.onclick = async () => {
         globalThis.__srRating = r.n;
+        globalThis.__srFilePath = dv.current().file.path;
         const code = await app.vault.adapter.read("_scripts/sr-evaluate.js");
-        eval(code);
-        delete globalThis.__srRating;
+        try {
+            await eval(code);
+        } finally {
+            delete globalThis.__srRating;
+            delete globalThis.__srFilePath;
+        }
     };
 }
 ```

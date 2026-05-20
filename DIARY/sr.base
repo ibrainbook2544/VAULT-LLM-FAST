@@ -30,7 +30,7 @@ views:
       - property: sr_next_review_datetime
         direction: DESC
       - property: sr_review_count
-        direction: DESC
+        direction: ASC
       - property: importance
         direction: DESC
       - property: views
@@ -38,7 +38,7 @@ views:
     limit: 20
     columnSize:
       file.name: 254
-      note.sr_next_review_datetime: 147
+      note.sr_next_review_datetime: 199
       note.sr_review_count: 93
       formula.overdue_days: 89
       note.importance: 110

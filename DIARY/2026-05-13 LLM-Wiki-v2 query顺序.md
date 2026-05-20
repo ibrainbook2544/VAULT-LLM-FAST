@@ -3,18 +3,17 @@ type: diary-atom
 subtype: 灵感
 created: 2026-05-13
 importance: 4
-sr_review_count: 2
-sr_next_review_datetime: 2026-05-19 20:01:27
-promoted_to:
+sr_review_count: 3
+sr_next_review_datetime: 2026-05-23 22:04:40
 tags:
   - LLM-Wiki
   - query
   - 检索顺序
 sources: []
-updated: 2026-05-19T18:01
-views: 3
-last_visited: 2026-05-19 16:54:06
-contentHash: 39622bba8f791e13f627c57983d1b3fe28fc1251c2fab64bdc032937241b33fb
+updated: 2026-05-19T22:04
+views: 7
+last_visited: 2026-05-19 20:41:50
+contentHash: bfc748e83757d6a86b5b6aaad55afb16d0ac4fcd45f82350a4887f4bad3a351b
 ---
 
 
@@ -42,9 +41,14 @@ for (const r of RATINGS) {
     btn.onmouseleave = () => btn.style.opacity = "1";
     btn.onclick = async () => {
         globalThis.__srRating = r.n;
+        globalThis.__srFilePath = dv.current().file.path;
         const code = await app.vault.adapter.read("_scripts/sr-evaluate.js");
-        eval(code);
-        delete globalThis.__srRating;
+        try {
+            await eval(code);
+        } finally {
+            delete globalThis.__srRating;
+            delete globalThis.__srFilePath;
+        }
     };
 }
 ```

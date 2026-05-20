@@ -1,0 +1,149 @@
+/* Shell Reminder — 设置面板样式 */
+
+/* 状态栏「下一个任务」 */
+.sh-reminder-status {
+  cursor: pointer;
+}
+
+/* 状态栏：有漏跑任务时高亮告警 */
+.sh-reminder-status-missed {
+  color: var(--text-error);
+  font-weight: 600;
+}
+
+/* 漏跑任务着重框 */
+.sh-reminder-missed-box {
+  margin-bottom: 14px;
+  padding: 8px 12px;
+  background: var(--background-modifier-error-rgb, rgba(255, 0, 0, 0.08));
+  background: rgba(var(--background-modifier-error-rgb, 255, 0, 0), 0.1);
+  border: 1px solid var(--text-error);
+  border-radius: 6px;
+}
+
+.sh-reminder-missed-title {
+  color: var(--text-error);
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+/* 全部脚本提醒列表 */
+.sh-reminder-list {
+  margin-bottom: 16px;
+  max-height: 260px;            /* 太多时不撑长整个设置页 */
+  overflow-y: auto;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 6px;
+  padding: 8px 10px;
+}
+
+/* 表头吸顶，滚动时仍可见 */
+.sh-reminder-list-table thead th {
+  position: sticky;
+  top: 0;
+  background: var(--background-primary);
+  z-index: 1;
+}
+
+.sh-reminder-list-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85em;
+}
+
+.sh-reminder-list-table th {
+  text-align: left;
+  padding: 5px 8px;
+  border-bottom: 2px solid var(--background-modifier-border);
+}
+
+.sh-reminder-list-table td {
+  padding: 5px 8px;
+  border-bottom: 1px solid var(--background-modifier-border);
+}
+
+.sh-reminder-list-table code {
+  background: var(--background-secondary);
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+
+.sh-reminder-list-table a {
+  cursor: pointer;
+}
+
+
+/* 使用说明 */
+.sh-reminder-intro {
+  margin-bottom: 16px;
+  font-size: 0.9em;
+  line-height: 1.6;
+}
+
+.sh-reminder-intro ol {
+  margin: 8px 0;
+  padding-left: 22px;
+}
+
+.sh-reminder-intro li {
+  margin-bottom: 6px;
+}
+
+.sh-reminder-intro code {
+  background: var(--background-secondary);
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+
+/* 任务语法示例框 */
+.sh-reminder-syntax-box {
+  background: var(--background-secondary);
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-family: var(--font-monospace);
+  font-size: 0.9em;
+  margin-bottom: 12px;
+}
+
+/* 脚本类型表格 */
+.sh-reminder-table-wrap {
+  margin-bottom: 16px;
+}
+
+.sh-reminder-table-wrap table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9em;
+}
+
+.sh-reminder-table-wrap th {
+  text-align: left;
+  padding: 6px 10px;
+  border-bottom: 2px solid var(--background-modifier-border);
+}
+
+.sh-reminder-table-wrap td {
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--background-modifier-border);
+}
+
+.sh-reminder-table-wrap code {
+  background: var(--background-secondary);
+  padding: 2px 6px;
+  border-radius: 3px;
+}
+
+/* 注意事项提示框 */
+.sh-reminder-notes {
+  padding: 8px 12px;
+  background: var(--background-modifier-form-field);
+  border-left: 3px solid var(--interactive-accent);
+  border-radius: 4px;
+  font-size: 0.85em;
+  margin-bottom: 16px;
+}
+
+.sh-reminder-notes ul {
+  margin: 4px 0 0 0;
+  padding-left: 20px;
+}

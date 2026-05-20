@@ -53,9 +53,14 @@ for (const r of RATINGS) {
     btn.onmouseleave = () => btn.style.opacity = "1";
     btn.onclick = async () => {
         globalThis.__srRating = r.n;
+        globalThis.__srFilePath = dv.current().file.path;
         const code = await app.vault.adapter.read("_scripts/sr-evaluate.js");
-        eval(code);
-        delete globalThis.__srRating;
+        try {
+            await eval(code);
+        } finally {
+            delete globalThis.__srRating;
+            delete globalThis.__srFilePath;
+        }
     };
 }
 ```

@@ -8,7 +8,7 @@
       "templatePath": "_template/Diary Atom Template.md",
       "fileNameFormat": {
         "enabled": true,
-        "format": "{{DATE:YYYY-MM-DDTHHmmss}} atom-temp"
+        "format": "{{DATE:YYYY-MM-DD}} New Diary Atom"
       },
       "folder": {
         "enabled": true,
@@ -35,7 +35,8 @@
         "direction": "vertical",
         "mode": "default",
         "focus": true
-      }
+      },
+      "onePageInput": "always"
     },
     {
       "id": "c9d1f3a7-4b82-4e6a-9f12-7d8e5b3a1c64",
@@ -45,7 +46,7 @@
       "templatePath": "_template/Task Template.md",
       "fileNameFormat": {
         "enabled": true,
-        "format": "{{DATE:YYYY-MM-DD}} task-temp"
+        "format": "{{DATE:YYYY-MM-DD}} New Task"
       },
       "folder": {
         "enabled": true,

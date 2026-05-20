@@ -4,14 +4,13 @@ subtype: 灵感
 created: 2026-05-16
 importance: 3
 sr_review_count: 10
-sr_next_review_datetime: 2026-05-19 18:31:16
-promoted_to:
+sr_next_review_datetime: 2026-05-19 19:49:49
 tags: []
 sources: []
-views: 9
-last_visited: 2026-05-19 16:54:40
-updated: 2026-05-19T18:01
-contentHash: 2acd83c7ad9980726e32f73ef969a0065a46d0ec177a9544ec69f1e6a598c3a8
+views: 10
+last_visited: 2026-05-19 22:11:13
+updated: 2026-05-19T20:54
+contentHash: 72fe8b1e19f5f9b1d064b2953839a2ca5240b2163811397b7faa35b9f8653734
 ---
 
 
@@ -39,9 +38,14 @@ for (const r of RATINGS) {
     btn.onmouseleave = () => btn.style.opacity = "1";
     btn.onclick = async () => {
         globalThis.__srRating = r.n;
+        globalThis.__srFilePath = dv.current().file.path;
         const code = await app.vault.adapter.read("_scripts/sr-evaluate.js");
-        eval(code);
-        delete globalThis.__srRating;
+        try {
+            await eval(code);
+        } finally {
+            delete globalThis.__srRating;
+            delete globalThis.__srFilePath;
+        }
     };
 }
 ```

@@ -1,6 +1,6 @@
 {
-  "id": "claudian-scheduler",
-  "name": "Claudian Scheduler",
+  "id": "sh-reminder",
+  "name": "Shell Reminder",
   "version": "1.0.0",
   "minAppVersion": "1.0.0",
   "description": "在笔记任务中定时执行 Shell 脚本，实现 Obsidian 内自动化调度",

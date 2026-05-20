@@ -1,0 +1,6 @@
+{
+  "enabled": true,
+  "checkIntervalSeconds": 60,
+  "showNotifications": true,
+  "logFile": "logs/sh-reminder.log"
+}

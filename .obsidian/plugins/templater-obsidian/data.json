@@ -19,11 +19,11 @@
       "template": ""
     }
   ],
-  "enable_file_templates": false,
+  "enable_file_templates": true,
   "file_templates": [
     {
-      "regex": ".*",
-      "template": ""
+      "regex": "^DIARY/\\d{4}-\\d{2}-\\d{2} .+\\.md$",
+      "template": "_template/Diary Atom Template.md"
     }
   ],
   "syntax_highlighting": true,

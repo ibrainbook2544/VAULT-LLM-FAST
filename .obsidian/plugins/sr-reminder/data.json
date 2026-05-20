@@ -1,15 +1,15 @@
 {
   "enabled": true,
-  "intervalMinutes": 15,
   "triggerOnLoad": false,
-  "lookAheadDays": 0,
-  "baseFile": "DIARY/SR Dashboard.md",
-  "maxListCount": 5,
+  "intervalMinutes": 15,
   "desktopNotification": true,
+  "desktopShowPreview": true,
   "inAppNotice": true,
-  "atomTypeValue": "diary-atom",
+  "maxListCount": 5,
+  "baseFile": "DIARY/SR Dashboard.md",
+  "diaryFolder": "DIARY",
   "typeField": "type",
+  "atomTypeValue": "diary-atom",
   "nextReviewField": "sr_next_review_datetime",
-  "archivedField": "__disabled__",
   "importanceField": "importance"
 }

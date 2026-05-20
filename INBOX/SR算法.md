@@ -1,7 +1,7 @@
 ---
 created: 2026-05-19T17:05
-updated: 2026-05-19T17:44
-contentHash: fad738eff99eaaa93a67858671f2569ce0372fe17dc58027e9963f5077d733f7
+updated: 2026-05-19T20:50
+contentHash: a745ca811a7abaac4d9dd4daa2c3f21b802858202d40baf528e0efcae86cf2d1
 ---
 
 ## SR算法用到的SR插件设置栏目
@@ -52,9 +52,14 @@ for (const r of RATINGS) {
     btn.onmouseleave = () => btn.style.opacity = "1";
     btn.onclick = async () => {
         globalThis.__srRating = r.n;
+        globalThis.__srFilePath = dv.current().file.path;
         const code = await app.vault.adapter.read("_scripts/sr-evaluate.js");
-        eval(code);
-        delete globalThis.__srRating;
+        try {
+            await eval(code);
+        } finally {
+            delete globalThis.__srRating;
+            delete globalThis.__srFilePath;
+        }
     };
 }
 ```

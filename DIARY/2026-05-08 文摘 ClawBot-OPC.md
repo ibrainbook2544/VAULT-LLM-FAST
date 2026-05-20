@@ -4,8 +4,7 @@ subtype: 文摘
 created: 2026-05-08
 importance: 1
 sr_review_count: 2
-sr_next_review_datetime: 2026-05-19 18:16:03
-promoted_to:
+sr_next_review_datetime: 2026-05-19 19:04:55
 tags:
   - OPC
   - ClawBot
@@ -13,10 +12,10 @@ tags:
   - 一人公司
 sources:
   - https://www.superlinear.academy/c/share-your-projects/clawbot-x-opc-1b-token-18-30-agents
-updated: 2026-05-19T17:53
+updated: 2026-05-19T22:10
 views: 11
 last_visited: 2026-05-19 17:55:00
-contentHash: 1e594386763956c989d6ea97bbd79e8c53a148889ff24a2fedf36339d32712b0
+contentHash: c375a6c71bd96d387f511164ae9e4b6bdcdaabe49e638089b968d5e1304b3a59
 ---
 
 
@@ -44,9 +43,14 @@ for (const r of RATINGS) {
     btn.onmouseleave = () => btn.style.opacity = "1";
     btn.onclick = async () => {
         globalThis.__srRating = r.n;
+        globalThis.__srFilePath = dv.current().file.path;
         const code = await app.vault.adapter.read("_scripts/sr-evaluate.js");
-        eval(code);
-        delete globalThis.__srRating;
+        try {
+            await eval(code);
+        } finally {
+            delete globalThis.__srRating;
+            delete globalThis.__srFilePath;
+        }
     };
 }
 ```
