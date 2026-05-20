@@ -2,27 +2,46 @@ filters:
   and:
     - file.folder == "TASK"
     - note.type == "task"
+formulas:
+  kind_icon: if(note.kind == "shell", "⚙️ 自动执行", if(note.kind == "reminder", "🔔 提醒", "📝 待办"))
+  priority_label: if(note.priority >= 5, "🔴 紧急", if(note.priority == 4, "🟠 高", if(note.priority == 3, "🟡 中", "🟢 低")))
+  overdue_days: if(note.due, if((date(today()) - note.due).days > 0, ((date(today()) - note.due).days).toFixed(0), 0), 0)
 properties:
+  note.kind:
+    displayName: 类型
+  formula.kind_icon:
+    displayName: 类型
   note.priority:
+    displayName: 优先级
+  formula.priority_label:
     displayName: 优先级
   note.status:
     displayName: 状态
   note.due:
     displayName: 截止
+  formula.overdue_days:
+    displayName: 逾期天数
+  note.remind_at:
+    displayName: 提醒时间
+  note.schedule:
+    displayName: 调度时间
+  note.script:
+    displayName: 脚本
   note.created:
     displayName: 创建
   note.tags:
     displayName: 标签
 views:
   - type: table
-    name: 活跃任务
+    name: 概览
     filters:
       and:
         - note.status != "done"
         - note.status != "cancelled"
     order:
       - file.name
-      - priority
+      - formula.kind_icon
+      - formula.priority_label
       - status
       - due
     sort:
@@ -31,8 +50,61 @@ views:
       - property: due
         direction: ASC
     columnSize:
-      note.priority: 97
+      file.name: 240
+      formula.kind_icon: 110
+      formula.priority_label: 97
       note.due: 104
+  - type: table
+    name: ① 简单待办
+    filters:
+      and:
+        - note.kind == "todo"
+        - note.status != "done"
+        - note.status != "cancelled"
+    order:
+      - file.name
+      - formula.priority_label
+      - status
+      - due
+      - tags
+    sort:
+      - property: priority
+        direction: DESC
+      - property: due
+        direction: ASC
+  - type: table
+    name: ② 提醒任务
+    filters:
+      and:
+        - note.kind == "reminder"
+        - note.status != "done"
+        - note.status != "cancelled"
+    order:
+      - file.name
+      - remind_at
+      - formula.priority_label
+      - status
+      - due
+    sort:
+      - property: remind_at
+        direction: ASC
+      - property: priority
+        direction: DESC
+  - type: table
+    name: ③ 自动执行
+    filters:
+      and:
+        - note.kind == "shell"
+        - note.status != "done"
+        - note.status != "cancelled"
+    order:
+      - file.name
+      - schedule
+      - script
+      - status
+    sort:
+      - property: schedule
+        direction: ASC
   - type: table
     name: 逾期
     filters:
@@ -42,8 +114,10 @@ views:
         - note.status != "cancelled"
     order:
       - file.name
-      - priority
+      - formula.kind_icon
+      - formula.priority_label
       - due
+      - formula.overdue_days
     sort:
       - property: due
         direction: ASC
@@ -52,11 +126,13 @@ views:
     filters:
       and:
         - note.due >= date(today())
-        - note.due < date(today()) + 7
+        - note.due < date(today()) + "7d"
         - note.status != "done"
+        - note.status != "cancelled"
     order:
       - file.name
-      - priority
+      - formula.kind_icon
+      - formula.priority_label
       - due
     sort:
       - property: due
@@ -68,18 +144,21 @@ views:
         - note.status == "done"
     order:
       - file.name
+      - formula.kind_icon
       - created
     sort:
       - property: created
         direction: DESC
   - type: cards
     name: 状态分组卡片
+    groupBy:
+      property: status
+      direction: ASC
     order:
       - file.name
-      - status
-      - priority
+      - formula.kind_icon
+      - formula.priority_label
+      - due
     sort:
-      - property: status
-        direction: ASC
       - property: priority
         direction: DESC

@@ -1,5 +1,6 @@
 ---
 type: task
+kind: todo
 title: AGENTS / CLAUDE skills 化
 priority: 3
 status: backlog
@@ -10,9 +11,10 @@ tags:
   - CLAUDE
   - AGENTS
 dependencies: []
-updated: 2026-05-16T19:32
+updated: 2026-05-20 08:50:19
 views: 1
 last_visited: 2026-05-16
+contentHash: 7bf166387cf189b967dc93e684e9b5e1fc201a1fd7e7b13cea4c8eed421419f5
 ---
 
 ## 目标

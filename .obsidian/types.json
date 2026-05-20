@@ -30,6 +30,7 @@
     "last_visited": "datetime",
     "created": "datetime",
     "date": "datetime",
-    "updated": "datetime"
+    "updated": "datetime",
+    "kind": "checkbox"
   }
 }

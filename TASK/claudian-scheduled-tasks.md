@@ -1,13 +1,17 @@
 ---
 type: task
+kind: shell
 title: Claudian 自动调度任务列表
 status: active
 priority: 3
+schedule: 每日 / 一次性（见正文任务行）
+script: _scripts/diary-lint.ps1
 created: 2026-05-18
 tags:
   - automation
   - claudian
-updated: 2026-05-18T11:56
+updated: 2026-05-20 08:50:24
+contentHash: d892515600a605177de4d4f5b1b47a19b0516e72260d5800a096f8e1326284cf
 ---
 
 # Claudian 定时任务

@@ -330,6 +330,7 @@ Frontmatter schema：
 ```yaml
 ---
 type: task
+kind: todo               # todo | reminder | shell（默认 todo，三类任务，见下）
 title:
 priority: 3              # 1(低) ~ 5(紧急) 默认 3 —— 与 diary.importance 同方向（数大=重要）
 status: backlog          # backlog | active | blocked | done | cancelled
@@ -337,8 +338,22 @@ created: YYYY-MM-DD
 due:                     # YYYY-MM-DD，可选
 tags: []
 dependencies: []         # 可填 "[[task-slug]]"
+# --- kind 相关可选字段（仅展示/排序用，真正触发靠正文内联语法）---
+remind_at:               # reminder 任务的提醒时间（YYYY-MM-DD HH:mm，可选）
+schedule:                # shell 任务的调度时间说明（可选）
+script:                  # shell 任务执行的脚本路径（可选）
 ---
 ```
+
+**三类任务（`kind`）**：
+
+| kind | 含义 | 触发方式 | 正文内联语法 |
+|------|------|---------|-------------|
+| `todo` | 简单待办，给用户自己看 / 执行 | 人工 | 普通 `- [ ]` 清单 |
+| `reminder` | 到点提醒用户去做 | **OB Reminder 插件** | `- [ ] 内容 (@YYYY-MM-DD HH:mm)` |
+| `shell` | 到点自动执行脚本，无需人工 | **Shell Reminder 插件** | `- [ ] 内容 (@时间) [shell: 脚本路径]` |
+
+> `remind_at` / `schedule` / `script` 仅供 `task.base` 展示与排序；提醒和脚本的真正触发由正文内联语法 + 对应插件完成。
 
 ### 6.2 任务生命周期
 
@@ -352,11 +367,16 @@ dependencies: []         # 可填 "[[task-slug]]"
 
 ### 6.3 task.base 视图
 
-- **活跃任务** — status ≠ done/cancelled，按优先级 + 截止日期排序
+- **概览** — status ≠ done/cancelled，带类型图标 + 优先级标签，按优先级 + 截止排序
+- **① 简单待办** — kind == todo
+- **② 提醒任务** — kind == reminder，按 remind_at 排序
+- **③ 自动执行** — kind == shell，显示 schedule / script 列
 - **逾期** — due < today，还未完成
 - **本周截止** — due ∈ [today, today+7)
 - **已完成** — status == done，反向时间序
-- **状态分组卡片** — 按 status 分组，卡片视图（Bases 暂不支持原生 kanban）
+- **状态分组卡片** — `groupBy: status` 卡片视图
+
+> 配套仪表盘 [[TASK/Task Dashboard.md]]：用 `![[task.base#视图]]` 嵌入以上视图，仿 [[DIARY/SR Dashboard.md]]。
 
 ### 6.4 vs diary-atom 的区别
 
@@ -379,8 +399,15 @@ dependencies: []         # 可填 "[[task-slug]]"
 **B. Schema / 字段范围**
 - `priority` ∉ [1, 5]
 - `status` ∉ {backlog, active, blocked, done, cancelled}
+- `kind` ∉ {todo, reminder, shell}（缺失按 todo，但应显式补全）
 - `due` 格式非 `YYYY-MM-DD`
-- 缺必填：`type`、`priority`、`status`、`created`
+- 缺必填：`type`、`kind`、`priority`、`status`、`created`
+
+**B2. kind 与正文一致性**
+- `kind: reminder` 但正文无 `(@时间)` 内联语法（提醒不会触发）
+- `kind: shell` 但正文无 `(@时间) [shell: …]` 语法（脚本不会触发）
+- 正文含 `[shell: …]` 但 `kind ≠ shell`（分类错误，应改为 shell）
+- `kind: shell` 的 `script` 指向不存在的脚本文件（死链）
 
 **C. 依赖完整性**
 - `dependencies` 里的 `[[task-slug]]` 死链
