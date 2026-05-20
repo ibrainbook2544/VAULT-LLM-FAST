@@ -5570,97 +5570,6 @@ var UpdateAllModal = class extends import_obsidian3.Modal {
   }
 };
 
-// src/UpdateAllCacheData.ts
-var import_obsidian4 = require("obsidian");
-var createTextSpan2 = (text) => {
-  const textSpan = document.createElement("span");
-  textSpan.setText(text);
-  return textSpan;
-};
-var createBr2 = () => document.createElement("br");
-var UpdateAllCacheData = class extends import_obsidian4.Modal {
-  constructor(app, plugin) {
-    super(app);
-    this.isOpened = false;
-    this.plugin = plugin;
-  }
-  async onRun() {
-    if (!this.divContainer) {
-      this.close();
-      return;
-    }
-    const allMdFiles = await this.plugin.getAllFilesPossiblyAffected();
-    const progress = document.createElement("progress");
-    progress.setAttr("max", allMdFiles.length);
-    const fileCounter = document.createElement("span");
-    const updateCount = (count) => {
-      progress.setAttr("value", count);
-      fileCounter.setText(`${count}/${allMdFiles.length}`);
-    };
-    updateCount(0);
-    const wrapperBar = document.createElement("div");
-    wrapperBar.append(progress, fileCounter);
-    wrapperBar.addClass("progress-section");
-    const header = createTextSpan2("Updating cache...");
-    this.divContainer.replaceChildren(header, wrapperBar);
-    if (this.settingsSection) {
-      this.contentEl.removeChild(this.settingsSection.settingEl);
-    }
-    for (let i = 0; i < allMdFiles.length; i++) {
-      if (!this.isOpened) {
-        new import_obsidian4.Notice("Bulk update for header stopped.", 2e3);
-        return;
-      }
-      updateCount(i + 1);
-      await this.plugin.populateCacheForFile(allMdFiles[i]);
-    }
-    const doneMessage = createTextSpan2(
-      "Done ! You can safely close this modal."
-    );
-    const el = new import_obsidian4.Setting(this.containerEl).addButton((btn) => {
-      btn.setButtonText("Close").onClick(() => {
-        this.close();
-      });
-    }).settingEl;
-    this.divContainer.replaceChildren(doneMessage, createBr2(), createBr2(), el);
-  }
-  async onOpen() {
-    this.isOpened = true;
-    let { contentEl } = this;
-    contentEl.addClass("update-time-on-edit--bulk-modal");
-    const header = contentEl.createEl("h2", {
-      text: `Finding eligible files in the vault...`
-    });
-    const allMdFiles = await this.plugin.getAllFilesPossiblyAffected();
-    header.setText(`Create all ${allMdFiles.length} files in the hash cache`);
-    const div = contentEl.createDiv();
-    this.divContainer = div;
-    div.append(
-      div.createSpan({
-        text: "This will update all cache data on files affected by this plugin"
-      }),
-      createBr2(),
-      createBr2()
-    );
-    this.settingsSection = new import_obsidian4.Setting(contentEl).addButton((btn) => {
-      btn.setButtonText("Run").setCta().onClick(() => {
-        this.onRun();
-      });
-      this.runButton = btn;
-    }).addButton((btn) => {
-      this.cancelButton = btn;
-      btn.setButtonText("Cancel").onClick(() => {
-        this.close();
-      });
-    });
-  }
-  onClose() {
-    let { contentEl } = this;
-    contentEl.empty();
-    this.isOpened = false;
-  }
-};
-
 // src/Settings.ts
 var DEFAULT_SETTINGS = {
   dateFormat: "yyyy-MM-dd'T'HH:mm",
@@ -5671,7 +5580,7 @@ var DEFAULT_SETTINGS = {
   ignoreGlobalFolder: [],
   ignoreCreatedFolder: [],
   enableExperimentalHash: false,
-  fileHashMap: {}
+  contentHashKey: "contentHash"
 };
 var UpdateTimeOnEditSettingsTab = class extends import_obsidian5.PluginSettingTab {
   constructor(app, plugin) {
@@ -5700,20 +5609,30 @@ var UpdateTimeOnEditSettingsTab = class extends import_obsidian5.PluginSettingTa
     this.addExcludedCreatedFoldersSetting();
     containerEl.createEl("h2", { text: "Experimental settings" });
     new import_obsidian5.Setting(this.containerEl).setName("Enable hash matcher").setDesc(
-      "Using a hash system to prevent too many updates happening, especially with sync."
+      "Store a SHA-256 hash of each note's body in its frontmatter to detect real content changes. Prevents unnecessary timestamp updates caused by sync tools firing modify events without actual edits."
     ).addToggle(
       (cb) => {
         var _a;
         return cb.setValue((_a = this.plugin.settings.enableExperimentalHash) != null ? _a : false).onChange(async (newValue) => {
           this.plugin.settings.enableExperimentalHash = newValue;
           await this.saveSettings();
+          this.display();
         });
       }
-    ).addButton(
-      (cb) => cb.setButtonText("Fill initial cache").onClick(() => {
-        new UpdateAllCacheData(this.app, this.plugin).open();
-      })
     );
+    if (this.plugin.settings.enableExperimentalHash) {
+      new import_obsidian5.Setting(this.containerEl).setName("Content hash property name").setDesc(
+        "Frontmatter property used to store the body hash. Each note stores its own hash, so no central cache file is needed. Change this name if it conflicts with an existing property in your notes."
+      ).addText(
+        (text) => {
+          var _a;
+          return text.setPlaceholder("contentHash").setValue((_a = this.plugin.settings.contentHashKey) != null ? _a : "contentHash").onChange(async (value) => {
+            this.plugin.settings.contentHashKey = value || "contentHash";
+            await this.saveSettings();
+          });
+        }
+      );
+    }
   }
   async saveSettings() {
     await this.plugin.saveSettings();
@@ -5901,6 +5820,14 @@ var UpdateTimeOnSavePlugin = class extends import_obsidian6.Plugin {
   hashString(str) {
     return (0, import_js_sha256.sha256)(str);
   }
+  getContentForHash(file, fileContent) {
+    var _a, _b;
+    const endOffset = (_b = (_a = this.app.metadataCache.getFileCache(file)) == null ? void 0 : _a.frontmatterPosition) == null ? void 0 : _b.end.offset;
+    if (typeof endOffset !== "number") {
+      return fileContent;
+    }
+    return fileContent.slice(endOffset).trim();
+  }
   async shouldFileBeIgnored(file) {
     if (!file.path) {
       return true;
@@ -5908,30 +5835,29 @@ var UpdateTimeOnSavePlugin = class extends import_obsidian6.Plugin {
     if (!file.path.endsWith(".md")) {
       return true;
     }
+    if (this.isExcalidrawFile(file)) {
+      return true;
+    }
+    const ignores = this.getIgnoreFolders();
+    if (ignores && ignores.some((ignoreItem) => file.path.startsWith(ignoreItem))) {
+      return true;
+    }
     const fileContent = (await this.app.vault.read(file)).trim();
-    const sha = this.hashString(fileContent);
     if (fileContent.length === 0) {
       return true;
     }
     if (this.settings.enableExperimentalHash) {
-      const maybeHash = this.settings.fileHashMap[file.path];
-      if (maybeHash) {
-        const sha2 = this.hashString(fileContent);
-        if (sha2 === maybeHash) {
+      const cache = this.app.metadataCache.getFileCache(file);
+      const storedHash = cache?.frontmatter?.[this.settings.contentHashKey];
+      if (storedHash) {
+        const sha = this.hashString(this.getContentForHash(file, fileContent));
+        if (sha === storedHash) {
           this.log("Ignoring file because, sha same");
           return true;
         }
       }
     }
-    const isExcalidrawFile = this.isExcalidrawFile(file);
-    if (isExcalidrawFile) {
-      return true;
-    }
-    const ignores = this.getIgnoreFolders();
-    if (!ignores) {
-      return false;
-    }
-    return ignores.some((ignoreItem) => file.path.startsWith(ignoreItem));
+    return false;
   }
   shouldIgnoreCreated(path) {
     if (!this.settings.enableCreateTime) {
@@ -5967,18 +5893,17 @@ var UpdateTimeOnSavePlugin = class extends import_obsidian6.Plugin {
     }
     return result;
   }
-  async populateCacheForFile(file) {
-    const fileContent = (await this.app.vault.read(file)).trim();
-    const sha = this.hashString(fileContent);
-    this.settings.fileHashMap[file.path] = sha;
-    await this.saveSettings();
-  }
   async handleFileChange(file, triggerSource) {
     if (!isTFile(file)) {
       return { status: "ignored" };
     }
     if (await this.shouldFileBeIgnored(file)) {
       return { status: "ignored" };
+    }
+    let newHash = null;
+    if (this.settings.enableExperimentalHash) {
+      const fileContent = (await this.app.vault.read(file)).trim();
+      newHash = this.hashString(this.getContentForHash(file, fileContent));
     }
     try {
       await this.app.fileManager.processFrontMatter(
@@ -6003,18 +5928,18 @@ var UpdateTimeOnSavePlugin = class extends import_obsidian6.Plugin {
           if (!frontmatter[updatedKey] || !currentMTimeOnFile) {
             this.log("Update updatedKey");
             frontmatter[updatedKey] = this.formatDate(mTime);
-            return;
-          }
-          if (this.shouldUpdateValue(mTime, currentMTimeOnFile)) {
+          } else if (this.shouldUpdateValue(mTime, currentMTimeOnFile)) {
             frontmatter[updatedKey] = this.formatDate(mTime);
             this.log("Update updatedKey");
-            return;
+          } else {
+            this.log("Skipping updateKey");
           }
-          this.log("Skipping updateKey");
+          if (newHash !== null) {
+            frontmatter[this.settings.contentHashKey] = newHash;
+          }
         },
         { ctime: file.stat.ctime, mtime: file.stat.mtime }
       );
-      await this.populateCacheForFile(file);
     } catch (e) {
       if ((e == null ? void 0 : e.name) === "YAMLParseError") {
         const errorMessage = `Update time on edit failed
@@ -6035,31 +5960,17 @@ ${e.message}`;
   }
   setupOnEditHandler() {
     this.log("Setup handler");
+    const debouncedHandleChange = import_obsidian6.debounce(
+      (file) => {
+        this.log("TRIGGER FROM MODIFY");
+        this.handleFileChange(file, "modify");
+      },
+      1e3,
+      true
+    );
     this.registerEvent(
       this.app.vault.on("modify", (file) => {
-        this.log("TRIGGER FROM MODIFY");
-        return this.handleFileChange(file, "modify");
-      })
-    );
-    this.registerEvent(
-      this.app.vault.on("rename", (file, oldPath) => {
-        const hash3 = this.settings.fileHashMap[oldPath];
-        if (!hash3) {
-          return;
-        }
-        this.settings.fileHashMap[file.path] = hash3;
-        delete this.settings.fileHashMap[oldPath];
-        this.saveSettings();
-      })
-    );
-    this.registerEvent(
-      this.app.vault.on("delete", async (file) => {
-        const sha = this.settings.fileHashMap[file.path];
-        if (!sha) {
-          return;
-        }
-        delete this.settings.fileHashMap[file.path];
-        this.saveSettings();
+        debouncedHandleChange(file);
       })
     );
   }

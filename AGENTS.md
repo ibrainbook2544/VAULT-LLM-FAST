@@ -201,134 +201,118 @@ summary: 一句话摘要
 ```yaml
 ---
 type: diary-atom
-subtype: 灵感        # 灵感 | 反思 | 教训 | 金句 | 文摘
-                     # （任务类内容 → TASK，不放 diary）
-created: YYYY-MM-DD
-importance: 3         # 1–5
-review_count: 0
-last_review:
-next_review: YYYY-MM-DD
-interval: 1           # 必须 ∈ {1,2,4,8,16,32,64,128}
-archived: false
-promoted_to:          # 晋升到 FAST 后填 [[wikilink]]
+subtype: 灵感                              # 灵感 | 反思 | 教训 | 金句 | 文摘
+                                           # （任务类内容 → TASK，不放 diary）
+created: YYYY-MM-DD HH:mm:ss
+importance: 3                              # 1–5
+# --- SR 算法状态（建议在 OB Properties 设置里批量隐藏 sr_* 前缀字段）---
+sr_review_count: 0                         # 本轮"完成"次数（按钮 5 才 +1）
+sr_next_review_datetime: YYYY-MM-DD HH:mm:ss
+# --- 浏览统计（由插件维护，非 SR 字段）---
 tags: []
 sources: []
+views: 0                                   # 实际打开次数
+last_visited:                              # 最近一次打开时间
 ---
 ```
 
-### 5.3 遗忘曲线算法（简单版 · 2^N 固定间隔）
+> **字段命名约定与历史**：
+> - **2026-05-18**：SR 状态字段统一加 `sr_` 前缀，便于在 OB Properties 里批量隐藏。
+> - **2026-05-19 v2**：算法整体重写为「按钮 1-4 = 当日反复巩固 / 按钮 5 = 跨日推进」双层模型，详见 §5.3。同时删除 `sr_interval` / `sr_archived` / `sr_last_review` / `promoted_to`（晋升机制取消）。
 
-间隔阶梯：**1 → 2 → 4 → 8 → 16 → 32 → 64 → 128 天**
+### 5.3 SR 遗忘曲线算法（双层模型）
 
-复习后根据自评：
+> **权威定义**：[[INBOX/SR算法.md]]
+> **核心实现**：[[_scripts/sr-evaluate.js]]
+> **数据库**：[[DIARY/sr.base]]
+> **触发器**：[[_template/Diary Atom Template.md]] 内的 dataviewjs 按钮
 
-| 自评 | 处理 |
+**配置常量**：`SR触发间隔 = 15 分钟`（同时硬编码于模板与 sr-evaluate.js）。
+
+**初始状态**（创建 atom 时由模板写入）：
+
+```yaml
+sr_review_count: 0
+sr_next_review_datetime: <now + 15min>
+```
+
+**按钮 1-4 — 本轮未完成，今日内反复巩固**
+
+```
+next = now + 15min × 2^(rating - 1)
+sr_review_count 不变
+```
+
+| 按钮 | 增量 |
 |------|------|
-| 😵 忘了 | `interval = 1` |
-| 😐 模糊 | `interval` 保持不变 |
-| 🙂 清楚 | `interval` 翻倍（上限 128） |
-| 😎 烂熟 | `archived = true`（出队，可考虑晋升到 FAST） |
+| 1 忘记 | +15min |
+| 2 模糊 | +30min |
+| 3 还行 | +60min |
+| 4 牢记 | +120min |
 
-每次复习更新三个字段：
-- `last_review = today`
-- `review_count += 1`
-- `next_review = today + interval`
+**按钮 5 — 本轮完成，跨日推进**
 
-### 5.4 晋升通道（atom → FAST wiki）
+```
+base = max(sr_next_review_datetime, now)         ← 钳制到未来，避免逾期堆积
+next = base + 24h × 2^sr_review_count
+sr_review_count += 1
+```
 
-当 atom 成熟到值得长期保留时：
-1. 把内容搬到对应 FAST 的 `wiki/concepts/` 或 `wiki/synthesis/`
-2. **原 atom 保留为 stub**：清空正文留一行链接，frontmatter 设 `archived: true` 且 `promoted_to: [[wiki/concepts/xxx]]`
-3. 这样既保留 diary 时间线，又把"已晋升"信息留作历史索引
+间隔阶梯（按按钮 5 第 N 次点击计）：**1 → 2 → 4 → 8 → 16 → 32 → 64 → 128 …** 天
 
-### 5.5 视图入口
+**写入后**：sr-evaluate.js 自动打开 [[DIARY/sr.base]] 首行记录；队列空则关闭当前页面。
 
-- **Bases**：[[DIARY/diary.base]]（今日复习 / 逾期 / 高价值低曝光 / 新建未复习 / 全部）
-- **Dataview**：在任意笔记里写 `FROM "DIARY" WHERE type = "diary-atom"`
+### 5.4 视图入口
 
-### 5.6 模板
+- **Bases**：
+  - [[DIARY/sr.base]] — SR 待复习队列（已逾期 top 20）
+  - [[DIARY/diary.base]] — 综合视图（今日复习 / 逾期 / 高价值低曝光 / 新建未复习 / 全部）
+- **Dataview**：`FROM "DIARY" WHERE type = "diary-atom"`
+
+### 5.5 模板
 
 - [[Diary Log Template]] — 当天容器
-- [[Diary Atom Template]] — 一个想法一张卡
+- [[Diary Atom Template]] — 一个想法一张卡（含 SR 按钮）
 
-### 5.7 Claudian 操作约定
+### 5.6 Claudian 操作约定
 
-- 用户写下闪念时：判断是「容器内容」还是「值得长期复习的原子」，倾向**拆成 atom**
-- AI 自动新建 atom 时：必须填全 SR frontmatter，`next_review` 默认 = `created`
-- 晋升时：必须保留 stub，不可直接删除 atom
+- 用户写下闪念时：判断是「容器内容」还是「值得长期复习的原子」，倾向**拆成 atom**。
+- AI 自动新建 atom 时：必须套用 [[Diary Atom Template]]，由模板填全 SR frontmatter。
+- **复习评分由用户在笔记页面点击按钮完成**，AI 一般不代劳。若用户在对话里口头评分（如 "/sr 3"），必须用 `processFrontMatter` 等价更新（参照 §5.3 公式），**不允许批量延后写入**——上一张未落盘前不进入下一张。
 
-### 5.8 `/diary-review` 复习流程（严格执行）
+> ⚠️ **历史教训（2026-05-15）**：曾经发生过"对话里报了新数值但未写入文件"的事故，下次复习时所有卡片状态仍是初始值。**禁止只口头反馈不落盘**。
 
-1. **查询队列**：读 [[DIARY/diary.base]] 「今日复习」视图，列出所有 `next_review <= today AND !archived` 的 atoms，按 `importance DESC, next_review ASC` 排序
-2. **逐张呈现**：展示卡片标题 + 内容回顾 + 当前 SR 状态（`review_count`, `interval`）
-3. **等待评分**：用户输入 `1/2/3/4` 或 `skip` / `defer` / `4+晋升`
-4. **🔴 立即写入 frontmatter（核心约束）**：
-   - 收到评分后**马上**用 Edit 工具更新该卡片的 frontmatter
-   - **不允许批量延后处理**——上一张未写入前不进入下一张
-   - 必须更新的字段：`review_count`、`last_review`、`interval`、`next_review`（必要时 `archived`、`importance`）
-   - **同步更新正文**：若卡片正文含 `- [ ] 复习此卡片 (@YYYY-MM-DD)` 行（obsidian-reminder 标记），把日期改成新的 `next_review`。这样 Dataview 和 Reminder 插件指向同一日期
-5. **应用算法**（见 §5.3 表格）：
-   - `1 忘了` → `interval = 1`
-   - `2 模糊` → `interval` 保持不变
-   - `3 清楚` → `interval *= 2`（上限 128）
-   - `4 烂熟` → `archived = true`，无需算 next_review
-6. **回执**：在对话里展示新 frontmatter 数值，让用户能立刻校对
-7. **继续下一张**，直到队列清空
-8. **汇总**：本轮结束后给一张总结表，标注次日需复习的卡片数
-
-> ⚠️ **历史教训（2026-05-15）**：曾经发生过"对话里报了新数值但未写入文件"的事故，下次复习时所有卡片状态仍是初始值，复习等于白做。**此条规则严格执行，不可省略**。
-
-### 5.9 `/diary-lint` 健康检查（只报告，不自动修复）
+### 5.7 `/diary-lint` 健康检查（只报告，不自动修复）
 
 扫描 `DIARY/` 所有 `diary-atom` 文件，输出报告至 `DIARY/logs/lint-YYYY-MM-DD.md`。
 
-**A. 状态不一致**
-- `review_count > 0` 但 `last_review` 为空（评了未记日期）
-- `review_count == 0` 但 `last_review` 非空（记了日期但 count 没加）
-- `last_review` 晚于 `next_review`（时间反了）
-- `next_review = last_review + interval` 不成立（算错了）
-- `archived == true` 但仍出现在「今日复习」结果（base 过滤失效信号）
+**A. 时间逻辑**
+- `sr_next_review_datetime` 早于 today − 14 天且 `sr_review_count == 0`（新建后从未复习，堆积超 2 周）
+- `sr_next_review_datetime` 早于 today − 30 天（任意 atom 长期未处理）
+- `sr_next_review_datetime` 格式不可解析为 `YYYY-MM-DD HH:mm:ss`
 
 **B. Schema 完整性**
-- 缺必填字段：`type` / `interval` / `next_review` / `importance` / `subtype`
-- `interval` ∉ {1, 2, 4, 8, 16, 32, 64, 128}
+- 缺必填字段：`type` / `sr_review_count` / `sr_next_review_datetime` / `importance` / `subtype` / `created`
 - `importance` ∉ [1, 5]
 - `subtype` ∉ {灵感, 反思, 教训, 金句, 文摘}（出现 `长期TODO` 即报警，应迁移到 TASK）
 - `type` ∉ {diary-log, diary-atom}
+- **遗留旧字段**：出现 `sr_interval` / `sr_archived` / `sr_last_review` / `promoted_to` / 裸 `review_count`/`next_review` 等 2026-05-19 v2 前的残留，需迁移或删除
 
 **C. 文件命名**
 - 不符合 `YYYY-MM-DD …` 前缀格式
-- `diary-log` 文件名却带 slug（应只有日期）
+- `diary-log` 文件名带 slug（应只有日期）
 - `diary-atom` 文件名只有日期（应有 slug）
 
-**D. 晋升一致性**
-- `promoted_to` 指向的 wikilink 解析不到（死链）
-- `archived == true` 且有 `promoted_to` 但正文超过 N 行（未改成 stub）
-- `promoted_to` 非空但 `archived == false`（半晋升）
+**D. 浏览统计**
+- `views > 0` 但 `last_visited` 为空（或反之）
+- `views` 非整数
 
-**E. 长期未复习堆积**
-- `archived == false` 且 `next_review` 早于 today − 14 天（堆积超 2 周）
+**E. Base 配置健康**
+- `diary.base` / `sr.base` 的 filter 用 `file.folder.startsWith(...)` 而非 `== "DIARY"`（会把 `_template/` 和 `logs/` 内污染文件混入）
+- `_template/Diary Atom Template.md` 自身被 base 列出（过滤器漏防）
+- 出现非根目录的 `diary-atom` 文件（应平铺在 `DIARY/` 根，不该在 `logs/` 等子目录）
 
-**F. Base 配置健康**
-- `diary.base` 的 filter 使用 `file.folder.startsWith(...)` 而非 `== "DIARY"`（会把 `_template/` 和 `logs/` 内的污染文件混入）
-- `_template/Diary Atom Template.md` 自身被 base 列出（说明过滤器漏防）
-- 出现非根目录的 `diary-atom` 文件（应平铺在 `DIARY/` 根，不该在 logs/ 等子目录）
-
-**报告格式**：
-
-```markdown
-# Diary Lint Report · YYYY-MM-DD
-
-## A. 状态不一致 (n 条)
-- [[文件]] — review_count=1 但 last_review 为空。建议：补 `last_review: YYYY-MM-DD`
-
-## B. Schema 完整性 (n 条)
-- [[文件]] — interval=3 不在阶梯内。建议：圆整到 2 或 4
-
-...
-```
-
-**输出后**：等用户确认是否逐条修复，**不自动改文件**（呼应 FAST-FAST lint 流程的"只报告"原则）。
+**输出后**：等用户确认是否逐条修复，**不自动改文件**。
 
 ---
 
@@ -380,7 +364,7 @@ dependencies: []         # 可填 "[[task-slug]]"
 |------|-----------|------|
 | **周期** | 遗忘曲线（间隔复习） | 优先级 + 截止（线性推进） |
 | **目标** | 防止遗忘，强化记忆 | 推进完成，交付价值 |
-| **评指标** | review_count, interval | status, progress |
+| **评指标** | sr_review_count, sr_interval | status, progress |
 | **适用场景** | 知识卡片、灵感、反思 | 工程任务、项目、功能 |
 
 ### 6.5 `/todo-lint` 健康检查（只报告，不自动修复）

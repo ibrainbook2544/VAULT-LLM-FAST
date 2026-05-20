@@ -1,0 +1,44 @@
+filters:
+  and:
+    - file.folder == "DIARY"
+    - note.type == "diary-atom"
+    - note.sr_next_review_datetime < now()
+formulas:
+  overdue_days: if(note.sr_next_review_datetime, if((now() - note.sr_next_review_datetime).days > 0, ((now() - note.sr_next_review_datetime).days).toFixed(0), 0), 0)
+properties:
+  note.sr_review_count:
+    displayName: 复习次数
+  note.sr_next_review_datetime:
+    displayName: 下次复习时间
+  formula.overdue_days:
+    displayName: 逾期天数
+  note.importance:
+    displayName: 重要程度
+  note.views:
+    displayName: 浏览次数
+views:
+  - type: table
+    name: 待复习
+    order:
+      - file.name
+      - sr_next_review_datetime
+      - sr_review_count
+      - formula.overdue_days
+      - importance
+      - views
+    sort:
+      - property: sr_next_review_datetime
+        direction: DESC
+      - property: sr_review_count
+        direction: DESC
+      - property: importance
+        direction: DESC
+      - property: views
+        direction: ASC
+    limit: 20
+    columnSize:
+      file.name: 254
+      note.sr_next_review_datetime: 147
+      note.sr_review_count: 93
+      formula.overdue_days: 89
+      note.importance: 110

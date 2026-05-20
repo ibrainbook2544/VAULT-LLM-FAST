@@ -3,9 +3,8 @@
   "claudian",
   "realclaudian",
   "obsidian-git",
-  "obsidian-reminder-plugin",
-  "calendar",
   "templater-obsidian",
   "quickadd",
-  "update-time-on-edit"
+  "update-time-on-edit",
+  "claudian-sr-notifier"
 ]

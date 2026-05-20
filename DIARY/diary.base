@@ -2,100 +2,72 @@ filters:
   and:
     - file.folder == "DIARY"
     - note.type == "diary-atom"
-    - note.archived != true
 formulas:
-  due_today: note.next_review <= date(today())
-  overdue_days: date(today()) - note.next_review
+  due_today: note.sr_next_review_datetime <= date(today())
+  overdue_days: if(note.sr_next_review_datetime, if((now() - note.sr_next_review_datetime).days > 0, ((now() - note.sr_next_review_datetime).days).toFixed(0), 0), 0)
 properties:
   note.subtype:
     displayName: 类型
   note.importance:
     displayName: 重要
-  note.review_count:
+  note.sr_review_count:
     displayName: 次数
-  note.interval:
-    displayName: 间隔
-  note.next_review:
-    displayName: 下次复习
-  note.last_review:
-    displayName: 上次复习
+  note.sr_next_review_datetime:
+    displayName: 下次复习日
+  formula.overdue_days:
+    displayName: 逾期天数
 views:
   - type: table
     name: 今日复习
     filters:
       and:
-        - formula.due_today
+        - formula.due_today == true
     order:
       - file.name
       - subtype
       - importance
-      - review_count
-      - interval
-      - next_review
+      - sr_review_count
+      - sr_next_review_datetime
     sort:
       - property: importance
         direction: DESC
-      - property: next_review
-        direction: ASC
-    columnSize:
-      file.name: 360
-      note.importance: 79
-      note.review_count: 62
-      note.interval: 61
-      note.next_review: 131
   - type: table
     name: 逾期
     filters:
       and:
-        - note.next_review < date(today())
+        - note.sr_next_review_datetime < date(today())
     order:
       - file.name
       - subtype
       - importance
-      - next_review
+      - sr_next_review_datetime
       - formula.overdue_days
-    sort:
-      - property: formula.overdue_days
-        direction: DESC
   - type: table
     name: 高价值低曝光
     filters:
       and:
         - note.importance >= 4
-        - note.review_count < 3
+        - note.sr_review_count < 3
     order:
       - file.name
       - subtype
       - importance
-      - review_count
-      - created
-    sort:
-      - property: review_count
-        direction: ASC
-      - property: importance
-        direction: DESC
+      - sr_review_count
+      - sr_next_review_datetime
   - type: table
     name: 新建未复习
     filters:
       and:
-        - note.review_count == 0
+        - note.sr_review_count == 0
     order:
       - file.name
       - subtype
       - importance
-      - created
-    sort:
-      - property: created
-        direction: DESC
+      - file.ctime
   - type: cards
-    name: 全部 (按类型)
+    name: 全部
     order:
       - file.name
       - subtype
       - importance
-      - review_count
-    sort:
-      - property: subtype
-        direction: ASC
-      - property: importance
-        direction: DESC
+      - sr_review_count

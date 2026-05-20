@@ -1,8 +1,8 @@
 {
   "userName": "",
   "permissionMode": "yolo",
-  "model": "sonnet",
-  "thinkingBudget": "low",
+  "model": "opus",
+  "thinkingBudget": "medium",
   "effortLevel": "high",
   "serviceTier": "default",
   "enableAutoTitleGeneration": true,
@@ -19,6 +19,7 @@
     "scrollDownKey": "s",
     "focusInputKey": "i"
   },
+  "requireCommandOrControlEnterToSend": false,
   "locale": "en",
   "providerConfigs": {
     "claude": {
@@ -31,7 +32,7 @@
       "enableOpus1M": false,
       "enableSonnet1M": false,
       "customModels": "",
-      "lastModel": "sonnet",
+      "lastModel": "opus",
       "environmentVariables": "",
       "environmentHash": ""
     },
@@ -45,7 +46,7 @@
       "environmentVariables": "",
       "environmentHash": "",
       "installationMethodsByHost": {
-        "DELL-9020MICRO": "native-windows"
+        "device:b3d1d8e7-9465-469f-93b3-b4300a4291ce": "native-windows"
       },
       "wslDistroOverridesByHost": {}
     },
@@ -63,7 +64,7 @@
   },
   "settingsProvider": "claude",
   "savedProviderModel": {
-    "claude": "sonnet",
+    "claude": "opus",
     "codex": "gpt-5.4-mini"
   },
   "savedProviderEffort": {
@@ -74,7 +75,7 @@
     "codex": "default"
   },
   "savedProviderThinkingBudget": {
-    "claude": "low",
+    "claude": "medium",
     "codex": "off"
   },
   "savedProviderPermissionMode": {

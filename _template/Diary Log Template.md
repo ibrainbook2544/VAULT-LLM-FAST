@@ -1,6 +1,6 @@
 ---
 type: diary-log
-date: <% tp.date.now("YYYY-MM-DD") %>
+date: <% tp.date.now("YYYY-MM-DD HH:mm:ss") %>
 tags: []
 ---
 
