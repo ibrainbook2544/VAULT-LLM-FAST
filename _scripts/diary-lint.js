@@ -16,8 +16,8 @@ const LOGS_DIR   = path.join(DIARY_DIR, 'logs');
 const RUNNER_LOG = path.join(VAULT_PATH, '_scripts', 'task-runner.log');
 
 const VALID_INTERVALS = new Set([1, 2, 4, 8, 16, 32, 64, 128]);
-const VALID_SUBTYPES  = new Set(['灵感', '反思', '教训', '金句', '文摘']);
-const VALID_TYPES     = new Set(['diary-log', 'diary-atom']);
+const VALID_SUBTYPES  = new Set(['card']);
+const VALID_TYPES     = new Set(['diary']);
 const REQUIRED_FIELDS = ['type', 'interval', 'next_review', 'importance', 'subtype'];
 
 // ─── YAML Frontmatter 简易解析 ──────────────────────────────
@@ -167,15 +167,15 @@ function checkAtom(file, fm, bodyLines) {
     issues.push(new LintIssue('B', file, `subtype=${st} 不在 {灵感,反思,教训,金句,文摘}`, '改为合法 subtype'));
   }
   if (tp && !VALID_TYPES.has(tp)) {
-    issues.push(new LintIssue('B', file, `type=${tp} 不在 {diary-log,diary-atom}`, '改为合法 type'));
+    issues.push(new LintIssue('B', file, `type=${tp} 不在 {diary}`, '改为合法 type'));
   }
 
   // C. 文件命名
   const stem = path.basename(file, '.md');
   if (!/^\d{4}-\d{2}-\d{2}/.test(stem)) {
     issues.push(new LintIssue('C', file, `文件名 \`${stem}\` 不符合 YYYY-MM-DD 前缀`, '重命名加日期前缀'));
-  } else if (tp === 'diary-atom' && /^\d{4}-\d{2}-\d{2}$/.test(stem)) {
-    issues.push(new LintIssue('C', file, 'diary-atom 文件名只有日期，缺 slug', '在日期后追加描述性 slug'));
+  } else if (st === 'card' && /^\d{4}-\d{2}-\d{2}$/.test(stem)) {
+    issues.push(new LintIssue('C', file, 'diary card 文件名只有日期，缺 slug', '在日期后追加描述性 slug'));
   } else if (tp === 'diary-log' && !/^\d{4}-\d{2}-\d{2}$/.test(stem)) {
     issues.push(new LintIssue('C', file, `diary-log 文件名 \`${stem}\` 带 slug，应只有日期`, '去除 slug'));
   }
@@ -257,11 +257,11 @@ function main() {
     try { content = fs.readFileSync(file, 'utf8'); } catch { continue; }
     const { fm, bodyStart } = parseFrontmatter(content);
     if (!Object.keys(fm).length) { otherCount++; continue; }
-    if (fm.type === 'diary-atom') {
+    if (fm.type === 'diary' && fm.subtype === 'card') {
       atomCount++;
       const bodyLines = content.split(/\r?\n/).slice(bodyStart);
       allIssues.push(...checkAtom(file, fm, bodyLines));
-    } else if (fm.type === 'diary-log') {
+    } else if (fm.type === 'diary' && !fm.subtype) {
       logCount++;
     } else {
       otherCount++;
@@ -290,7 +290,7 @@ function main() {
     '| 项目 | 数值 |',
     '|------|------|',
     `| 扫描文件总数（DIARY/ 根目录） | ${totalCount} 个 |`,
-    `| 其中 diary-atom | ${atomCount} 个 |`,
+    `| 其中 diary card | ${atomCount} 个 |`,
     `| 其中 diary-log | ${logCount} 个 |`,
     `| 其中其他类型 | ${otherCount} 个 |`,
     `| 发现问题 | ${allIssues.length} 条 |`,

@@ -6,7 +6,8 @@ tags:
   - fast
   - knowledge-base
 created: 2026-05-16T16:37
-updated: 2026-05-16T19:14
+updated: 2026-05-20 16:03:56
+contentHash: 6ba77eaec7b67a1663e69c7cdf057805905697433a3b55febf3f866f86f1d6f8
 ---
 
 # 总索引
@@ -84,7 +85,7 @@ LIMIT 20
 ## ❄️ 冷门笔记 Top 20
 
 > 浏览少 + 久未访问 → 值得重新看看，或考虑归档/晋升
-> 全库扫描，仅排除：VAULT-TODO / 模板 / 附件 / raw / logs / Inbox.md / 已归档 atoms
+> 全库扫描，仅排除：VAULT-TODO / 模板 / 附件 / raw / logs / Inbox.md / 已归档 cards
 
 ```dataview
 TABLE views AS "👁️ 浏览", last_visited AS "最近阅读", type AS "类型", file.mtime AS "最后修改"

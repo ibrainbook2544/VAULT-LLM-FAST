@@ -12,13 +12,11 @@ const DEFAULT_SETTINGS = {
   desktopShowPreview:   false,       // 桌面通知中是否显示卡片标题（关闭可避免投屏/公共环境泄露）
   inAppNotice:         true,         // 是否同时发 OB 内 Notice
   maxListCount:        5,            // 通知中最多列出的卡片数
-  baseFile:            'DIARY/sr.base', // 点击通知后打开的文件
-  diaryFolder:         'DIARY',      // 只扫描 DIARY 根目录下的 diary-atom
+  baseFile:            'SR Dashboard.md', // 点击通知后打开的文件
+  excludeFolder:       '_template',  // 全库扫描时排除的文件夹（避免模板 <% %> 占位污染）
 
   // ─── 高级：字段名映射 ───
-  typeField:        'type',
-  atomTypeValue:    'diary-atom',
-  nextReviewField:  'sr_next_review_datetime',
+  nextReviewField:  'sr_next_review_datetime', // 凡带此字段的笔记即纳入 SR 队列
   importanceField:  'importance',
 };
 
@@ -233,24 +231,21 @@ class SrReminderPlugin extends obsidian.Plugin {
     // 严格以「当前时刻」为基准（精确到秒），配合 SR 算法的分钟级节奏
     const now = new Date();
 
-    const TYPE_FIELD = this.settings.typeField        || 'type';
-    const ATOM_VALUE = this.settings.atomTypeValue    || 'diary-atom';
     const NEXT_FIELD = this.settings.nextReviewField  || 'sr_next_review_datetime';
     const IMP_FIELD  = this.settings.importanceField  || 'importance';
-    const DIARY_FOLDER = this.settings.diaryFolder || 'DIARY';
+    const EXCLUDE_FOLDER = this.settings.excludeFolder || '_template';
 
     const dueCards = [];
 
     // ⚡ 关键：用 metadataCache（零 IO，O(n) 内存查询）
+    // SR 已与 DIARY 解绑：全库扫描凡带 sr_next_review_datetime 字段的笔记
+    // （diary-card 或将来的 FAST 原子笔记），仅排除模板目录，避免 <% %> 占位污染队列。
     for (const file of this.app.vault.getMarkdownFiles()) {
-      // 只扫描 DIARY 根目录，避免 _template/logs 或其他 FAST 中的同名类型污染提醒队列
-      if (file.parent?.path !== DIARY_FOLDER) continue;
+      if (file.parent?.path === EXCLUDE_FOLDER) continue;
 
       const cache = this.app.metadataCache.getFileCache(file);
       const fm = cache && cache.frontmatter;
       if (!fm) continue;
-
-      if (fm[TYPE_FIELD] !== ATOM_VALUE) continue;
 
       const nr = this.parseDateValue(fm[NEXT_FIELD]);
       if (!nr) continue;
@@ -302,7 +297,7 @@ class SrReminderPlugin extends obsidian.Plugin {
 
     // 点击通知后的统一动作：打开 baseFile
     const openReviewView = () => {
-      const targetPath = this.normalizePathSetting(this.settings.baseFile, 'DIARY/sr.base');
+      const targetPath = this.normalizePathSetting(this.settings.baseFile, 'SR Dashboard.md');
       const target = this.app.vault.getAbstractFileByPath(targetPath);
       if (target instanceof obsidian.TFile) {
         this.app.workspace.getLeaf().openFile(target);
@@ -476,11 +471,11 @@ class SrReminderSettingTab extends obsidian.PluginSettingTab {
     ul.style.margin = '6px 0 0 0';
     ul.style.paddingLeft = '20px';
     [
-      '使用 Obsidian metadataCache 读取 DIARY 根目录下 diary-atom 文件的 frontmatter（零文件 IO）',
-      '过滤条件：file.parent=DIARY AND type=diary-atom AND sr_next_review_datetime ≤ now（精确到秒，配合分钟级 SR 节奏）',
+      '使用 Obsidian metadataCache 全库读取带 sr_next_review_datetime 字段的笔记 frontmatter（零文件 IO）',
+      '过滤条件：sr_next_review_datetime ≤ now AND file.parent ≠ _template（精确到秒，配合分钟级 SR 节奏；已与 DIARY 解绑，支持 FAST 原子笔记）',
       '排序：sr_next_review_datetime 降序 → sr_review_count 升序（与 sr.base 队列一致）',
       '按固定间隔（默认每 15 分钟）轮询一次，命中时同时推送：OB 内 Notice + 系统桌面通知（OB 最小化也能看到）',
-      '点击任一通知 → 拉起 OB 窗口并打开复习视图（默认 DIARY/sr.base）',
+      '点击任一通知 → 拉起 OB 窗口并打开复习视图（默认 SR Dashboard.md）',
       '桌面通知默认隐藏卡片标题，避免投屏或公共环境泄露笔记内容',
       '性能：1 万张卡片亦在 ~100ms 内完成扫描',
     ].forEach(t => ul.createEl('li', { text: t }));
@@ -595,12 +590,12 @@ class SrReminderSettingTab extends obsidian.PluginSettingTab {
 
     const baseFileSetting = new obsidian.Setting(containerEl)
       .setName('点击通知打开的文件')
-      .setDesc('点击 SR 通知时在 Obsidian 中打开该文件（默认 DIARY/sr.base）。仅在至少一个通知通道开启时生效。');
+      .setDesc('点击 SR 通知时在 Obsidian 中打开该文件（默认 SR Dashboard.md）。仅在至少一个通知通道开启时生效。');
     baseFileSetting.addText(t => bindDisabled(t
-      .setPlaceholder('DIARY/sr.base')
+      .setPlaceholder('SR Dashboard.md')
       .setValue(this.plugin.settings.baseFile)
       .onChange(async v => {
-        this.plugin.settings.baseFile = this.plugin.normalizePathSetting(v, 'DIARY/sr.base');
+        this.plugin.settings.baseFile = this.plugin.normalizePathSetting(v, 'SR Dashboard.md');
         await this.plugin.saveSettings();
       }), baseFileSetting, () => !this.plugin.settings.enabled || this.plugin.settings.inAppNotice === false && this.plugin.settings.desktopNotification === false));
 

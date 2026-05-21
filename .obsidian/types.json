@@ -31,6 +31,6 @@
     "created": "datetime",
     "date": "datetime",
     "updated": "datetime",
-    "kind": "checkbox"
+    "kind": "text"
   }
 }

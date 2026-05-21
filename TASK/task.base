@@ -3,11 +3,11 @@ filters:
     - file.folder == "TASK"
     - note.type == "task"
 formulas:
-  kind_icon: if(note.kind == "shell", "⚙️ 自动执行", if(note.kind == "reminder", "🔔 提醒", "📝 待办"))
+  kind_icon: if(note.subtype == "shell", "⚙️ 自动执行", if(note.subtype == "reminder", "🔔 提醒", "📝 待办"))
   priority_label: if(note.priority >= 5, "🔴 紧急", if(note.priority == 4, "🟠 高", if(note.priority == 3, "🟡 中", "🟢 低")))
   overdue_days: if(note.due, if((date(today()) - note.due).days > 0, ((date(today()) - note.due).days).toFixed(0), 0), 0)
 properties:
-  note.kind:
+  note.subtype:
     displayName: 类型
   formula.kind_icon:
     displayName: 类型
@@ -58,7 +58,7 @@ views:
     name: ① 简单待办
     filters:
       and:
-        - note.kind == "todo"
+        - note.subtype == "todo"
         - note.status != "done"
         - note.status != "cancelled"
     order:
@@ -76,7 +76,7 @@ views:
     name: ② 提醒任务
     filters:
       and:
-        - note.kind == "reminder"
+        - note.subtype == "reminder"
         - note.status != "done"
         - note.status != "cancelled"
     order:
@@ -94,7 +94,7 @@ views:
     name: ③ 自动执行
     filters:
       and:
-        - note.kind == "shell"
+        - note.subtype == "shell"
         - note.status != "done"
         - note.status != "cancelled"
     order:

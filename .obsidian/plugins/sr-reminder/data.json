@@ -6,10 +6,8 @@
   "desktopShowPreview": true,
   "inAppNotice": true,
   "maxListCount": 5,
-  "baseFile": "DIARY/SR Dashboard.md",
-  "diaryFolder": "DIARY",
-  "typeField": "type",
-  "atomTypeValue": "diary-atom",
+  "baseFile": "SR Dashboard.md",
+  "excludeFolder": "_template",
   "nextReviewField": "sr_next_review_datetime",
   "importanceField": "importance"
 }

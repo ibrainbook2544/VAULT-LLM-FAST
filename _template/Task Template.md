@@ -1,17 +1,15 @@
 ---
 type: task
-kind: todo
+subtype: todo
 title:
 priority: 3
 status: backlog
-created: 2026-05-15T20:29
 due:
 tags: []
 dependencies: []
-updated: 2026-05-16T16:37
 ---
 
-> **kind**: todo（自己执行） | reminder（OB Reminder 到点提醒） | shell（Shell Reminder 到点自动跑脚本）
+> **subtype**: todo（自己执行） | reminder（OB Reminder 到点提醒） | shell（Shell Reminder 到点自动跑脚本）
 > **priority**: 1(低) ~ 5(紧急)
 > **status**: backlog | active | blocked | done | cancelled
 >
@@ -30,7 +28,7 @@ async function setProp(key, val) {
 }
 
 const GROUPS = [
-    { key: "kind", title: "🏷️ 任务类型 kind", def: "todo", opts: [
+    { key: "subtype", title: "🏷️ 任务类型 subtype", def: "todo", opts: [
         { v: "todo",     label: "📝 todo",     color: "#7f8c8d" },
         { v: "reminder", label: "⏰ reminder", color: "#2980b9" },
         { v: "shell",    label: "⚙️ shell",    color: "#8e44ad" },

@@ -2,13 +2,13 @@
   "choices": [
     {
       "id": "a1763eea-d1ba-4d62-98d5-4f2dc9687739",
-      "name": "New Diary Atom",
+      "name": "New Diary Card",
       "type": "Template",
       "command": true,
-      "templatePath": "_template/Diary Atom Template.md",
+      "templatePath": "_template/Diary Card Templater.md",
       "fileNameFormat": {
         "enabled": true,
-        "format": "{{DATE:YYYY-MM-DD}} New Diary Atom"
+        "format": "{{DATE:YYYY-MM-DD}} New Diary Card"
       },
       "folder": {
         "enabled": true,

@@ -1,6 +1,5 @@
 ---
-type: diary-log
-date: <% tp.date.now("YYYY-MM-DD HH:mm:ss") %>
+type: diary
 tags: []
 ---
 
@@ -16,7 +15,8 @@ TABLE WITHOUT ID
   review_count AS "次数",
   interval AS "间隔"
 FROM "VAULT-DIARY"
-WHERE type = "diary-atom"
+WHERE type = "diary"
+  AND subtype = "card"
   AND !archived
   AND next_review <= date(today)
 SORT importance DESC, next_review ASC

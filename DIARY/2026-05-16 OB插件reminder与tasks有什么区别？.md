@@ -1,16 +1,17 @@
 ---
-type: diary-atom
-subtype: 灵感
+type: diary
+subtype: card
 created: 2026-05-16
 importance: 3
 sr_review_count: 10
 sr_next_review_datetime: 2026-05-19 19:49:49
-tags: []
+tags:
+  - 灵感
 sources: []
 views: 10
 last_visited: 2026-05-19 22:11:13
-updated: 2026-05-19T20:54
-contentHash: 72fe8b1e19f5f9b1d064b2953839a2ca5240b2163811397b7faa35b9f8653734
+updated: 2026-05-20 16:25:41
+contentHash: 36b94a7088d5c6dde202f1f565038e6f94f3d3a4eccc0cea0668116abf786ae9
 ---
 
 

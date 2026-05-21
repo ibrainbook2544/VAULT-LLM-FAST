@@ -1,11 +1,12 @@
 ---
-type: diary-atom
-subtype: 灵感
+type: diary
+subtype: card
 created: 2026-05-13
 importance: 4
 sr_review_count: 3
 sr_next_review_datetime: 2026-05-23 22:04:40
 tags:
+  - 灵感
   - LLM-Wiki
   - query
   - 检索顺序

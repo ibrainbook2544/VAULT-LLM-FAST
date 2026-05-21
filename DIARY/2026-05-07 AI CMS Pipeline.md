@@ -1,11 +1,12 @@
 ---
-type: diary-atom
-subtype: 文摘
+type: diary
+subtype: card
 created: 2026-05-18 15:39:34
 importance: 2
 sr_review_count: 3
 sr_next_review_datetime: 2026-05-19 22:04:54
 tags:
+  - 文摘
   - AI
   - CMS
   - Pipeline

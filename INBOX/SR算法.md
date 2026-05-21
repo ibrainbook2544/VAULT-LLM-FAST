@@ -1,8 +1,45 @@
 ---
 created: 2026-05-19T17:05
-updated: 2026-05-19T20:50
-contentHash: a745ca811a7abaac4d9dd4daa2c3f21b802858202d40baf528e0efcae86cf2d1
+updated: 2026-05-20 15:14:37
+contentHash: 4d238d558ee98a43ad21b67b449790719dd820cc83046a5760a867e2028e7cb7
+sr_review_count: 0
+sr_next_review_datetime: 2026-05-20 15:22:19
+importance: 3
+views: 0
+last_visited:
 ---
+```dataviewjs
+(async () => {
+    const DT_FMT = "YYYY-MM-DD HH:mm:ss";
+    const file = app.vault.getAbstractFileByPath(dv.current().file.path);
+
+    async function ensureSrFields() {
+        const fm = app.metadataCache.getFileCache(file)?.frontmatter ?? {};
+        const needsInit =
+            fm.sr_review_count == null ||
+            !fm.sr_next_review_datetime ||
+            fm.importance == null ||
+            fm.views == null ||
+            !Object.prototype.hasOwnProperty.call(fm, "last_visited");
+
+        if (!needsInit) return;
+
+        await app.fileManager.processFrontMatter(file, m => {
+            if (m.sr_review_count == null) m.sr_review_count = 0;
+            if (!m.sr_next_review_datetime) m.sr_next_review_datetime = moment().add(15, "minutes").format(DT_FMT);
+            if (m.importance == null) m.importance = 3;
+            if (m.views == null) m.views = 0;
+            if (!Object.prototype.hasOwnProperty.call(m, "last_visited")) m.last_visited = null;
+        });
+        new Notice(`🧠 已为 ${file.basename} 补齐 SR 属性`);
+    }
+
+    await ensureSrFields();
+
+    const code = await app.vault.adapter.read("_scripts/sr-evaluate.js");
+    await eval(code);
+})();
+```
 
 ## SR算法用到的SR插件设置栏目
 
@@ -11,11 +48,11 @@ SR触发间隔：默认15分钟
 ```
 
 
-## SR相关模板：/_template/Diary Atom Template.md
+## SR相关模板：/_template/Diary Card Templater.md
 
-> 注意：假设SR只针对 `Diary Atom`
+> 注意：假设SR只针对 `Diary Card`
 
-当用QuickAdd（New Diary Atom）新建一个SR页面时，自动套用此模板。
+当用QuickAdd（New Diary Card）新建一个SR页面时，自动套用此模板。
 
 模板包括：SR相关属性、SR记忆评估按钮
 
@@ -65,11 +102,11 @@ for (const r of RATINGS) {
 ```
 
 
-## SR数据库：`sr.base`
+## SR数据库：`sr.base`（根目录）
 
-> 注意：假设SR只针对 `Diary Atom`
+> 2026-05-20 起：SR 已与 `Diary Card` 解绑，`sr.base` 与 `SR Dashboard.md` 移至**仓库根目录**，按全库扫描。凡带 `sr_next_review_datetime` 字段的笔记（现为 diary-card，将来可用于 FAST 原子笔记）均纳入队列。
 
-在 `DIARY` 文件夹内所有 `diary-atom`，按照 `sr_next_review_datetime` 倒序排列，列出 `sr_next_review_datetime` 小于当前日期时间之前的20个记录。
+全库内凡带 `sr_next_review_datetime` 字段的笔记（排除 `_template/` 模板目录），按照 `sr_next_review_datetime` 倒序排列，列出 `sr_next_review_datetime` 小于当前日期时间之前的20个记录。
 
 其它字段：复习次数（sr_review_count）、下次复习时间（sr_next_review_datetime）、逾期天数重要程度、浏览次数
 

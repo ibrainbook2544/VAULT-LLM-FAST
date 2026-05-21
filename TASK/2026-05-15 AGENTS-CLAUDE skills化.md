@@ -1,6 +1,6 @@
 ---
 type: task
-kind: todo
+subtype: todo
 title: AGENTS / CLAUDE skills 化
 priority: 3
 status: backlog

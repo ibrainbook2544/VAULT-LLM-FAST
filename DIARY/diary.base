@@ -1,7 +1,8 @@
 filters:
   and:
     - file.folder == "DIARY"
-    - note.type == "diary-atom"
+    - note.type == "diary"
+    - note.subtype == "card"
 formulas:
   due_today: note.sr_next_review_datetime <= date(today())
   overdue_days: if(note.sr_next_review_datetime, if((now() - note.sr_next_review_datetime).days > 0, ((now() - note.sr_next_review_datetime).days).toFixed(0), 0), 0)

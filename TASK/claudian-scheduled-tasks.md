@@ -1,6 +1,6 @@
 ---
 type: task
-kind: shell
+subtype: shell
 title: Claudian 自动调度任务列表
 status: active
 priority: 3

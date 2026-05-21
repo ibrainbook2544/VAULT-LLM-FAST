@@ -22,8 +22,8 @@ LOGS_DIR      = DIARY_DIR / "logs"
 RUNNER_LOG    = VAULT_PATH / "_scripts" / "task-runner.log"
 
 VALID_INTERVALS = {1, 2, 4, 8, 16, 32, 64, 128}
-VALID_SUBTYPES  = {"灵感", "反思", "教训", "金句", "文摘"}
-VALID_TYPES     = {"diary-log", "diary-atom"}
+VALID_SUBTYPES  = {"card"}
+VALID_TYPES     = {"diary"}
 REQUIRED_FIELDS = ["type", "interval", "next_review", "importance", "subtype"]
 
 # ─── YAML Frontmatter 简易解析 ──────────────────────────────
@@ -169,8 +169,8 @@ def check_atom(file: Path, fm: dict, body_lines: list[str]) -> list[LintIssue]:
     if not re.match(r"^\d{4}-\d{2}-\d{2}", stem):
         issues.append(LintIssue("C", file, f"文件名 `{stem}` 不符合 YYYY-MM-DD 前缀",
                                 "重命名加日期前缀"))
-    elif tp == "diary-atom" and re.fullmatch(r"\d{4}-\d{2}-\d{2}", stem):
-        issues.append(LintIssue("C", file, "diary-atom 文件名只有日期，缺 slug",
+    elif st == "card" and re.fullmatch(r"\d{4}-\d{2}-\d{2}", stem):
+        issues.append(LintIssue("C", file, "diary card 文件名只有日期，缺 slug",
                                 "在日期后追加描述性 slug"))
     elif tp == "diary-log" and not re.fullmatch(r"\d{4}-\d{2}-\d{2}", stem):
         issues.append(LintIssue("C", file, f"diary-log 文件名 `{stem}` 带 slug，应只有日期",
@@ -235,11 +235,11 @@ def main():
             other_count += 1
             continue
         tp = fm.get("type")
-        if tp == "diary-atom":
+        if tp == "diary" and fm.get("subtype") == "card":
             atom_count += 1
             body_lines = content.splitlines()[body_start:]
             all_issues.extend(check_atom(path, fm, body_lines))
-        elif tp == "diary-log":
+        elif tp == "diary" and not fm.get("subtype"):
             log_count += 1
         else:
             other_count += 1
@@ -271,7 +271,7 @@ def main():
         "| 项目 | 数值 |",
         "|------|------|",
         f"| 扫描文件总数（DIARY/ 根目录） | {total_count} 个 |",
-        f"| 其中 diary-atom | {atom_count} 个 |",
+        f"| 其中 diary card | {atom_count} 个 |",
         f"| 其中 diary-log | {log_count} 个 |",
         f"| 其中其他类型 | {other_count} 个 |",
         f"| 发现问题 | {len(all_issues)} 条 |",

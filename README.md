@@ -81,7 +81,7 @@ Daily thoughts      ──→ DIARY/YYYY-MM-DD.md  (diary-log)
                               │
                               │  split when worth long-term retention
                               ▼
-                       Atom cards (diary-atom)
+                       Atom cards (diary-card)
                               │
                               │  ─→ spaced-repetition queue (1/2/4/8/16/32/64/128 days)
                               │
@@ -116,7 +116,7 @@ LLM-FAST/
 ├── TASK/                 # Task board (task.base)
 ├── DIARY/                # Process layer
 │   └── diary.base        # Diary + spaced-repetition views
-├── _template/            # Note templates (Task / Diary Log / Diary Atom)
+├── _template/            # Note templates (Task / Diary Log / Diary Card)
 ├── _attachment/          # Global attachments
 ├── index.md              # Master index
 ├── dashboard.md          # Stats dashboard

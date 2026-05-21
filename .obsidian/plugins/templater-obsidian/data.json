@@ -12,7 +12,7 @@
   "enable_system_commands": false,
   "shell_path": "",
   "user_scripts_folder": "",
-  "enable_folder_templates": true,
+  "enable_folder_templates": false,
   "folder_templates": [
     {
       "folder": "",
@@ -23,7 +23,7 @@
   "file_templates": [
     {
       "regex": "^DIARY/\\d{4}-\\d{2}-\\d{2} .+\\.md$",
-      "template": "_template/Diary Atom Template.md"
+      "template": "_template/Diary Card Templater.md"
     }
   ],
   "syntax_highlighting": true,

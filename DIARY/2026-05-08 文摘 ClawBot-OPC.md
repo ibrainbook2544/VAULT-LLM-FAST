@@ -1,11 +1,12 @@
 ---
-type: diary-atom
-subtype: 文摘
+type: diary
+subtype: card
 created: 2026-05-08
 importance: 1
 sr_review_count: 2
 sr_next_review_datetime: 2026-05-19 19:04:55
 tags:
+  - 文摘
   - OPC
   - ClawBot
   - agents

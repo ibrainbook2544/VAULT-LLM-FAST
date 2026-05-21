@@ -46,7 +46,7 @@ VAULT-LLM-FAST/               # 知识库：LLM-FAST
 ├── _template/                # 笔记模板
 │   ├── Task Template.md      # 任务模板
 │   ├── Diary Log Template.md # 日记容器模板
-│   └── Diary Atom Template.md # 日记原子卡模板
+│   └── Diary Card Templater.md # 日记原子卡模板
 ├── AGENTS.md                 # AI 行为规范（本文件）
 └── CLAUDE.md                 # @AGENTS.md
 ```
@@ -155,7 +155,7 @@ summary: 一句话摘要
 ---
 ```
 
-> **DIARY 例外**：日记文件使用 `diary-log` / `diary-atom` 双层模型，schema 见 §5。
+> **DIARY 例外**：日记文件统一 `type: diary`，用 `subtype` 区分双层模型（容器日志无 subtype / 原子卡 `subtype: card`），schema 见 §5。
 
 ### 4.3 链接约定
 
@@ -190,19 +190,19 @@ summary: 一句话摘要
 
 | 类型 | `type` 值 | 文件名 | 用途 |
 |------|-----------|--------|------|
-| **容器日志** | `diary-log` | `YYYY-MM-DD.md` | 当天流水账、TODO、零碎记录，**不复习** |
-| **原子卡片** | `diary-atom` | `YYYY-MM-DD <slug>.md` | 一念头/灵感/反思/教训/文摘 = 一文件，**进入复习队列** |
+| **容器日志** | `type: diary`（无 subtype） | `YYYY-MM-DD.md` | 当天流水账、TODO、零碎记录，**不复习** |
+| **原子卡片** | `type: diary` + `subtype: card` | `YYYY-MM-DD <slug>.md` | 一念头/灵感/反思/教训/文摘 = 一文件，**进入复习队列** |
 
-- **不建子目录**——所有文件平铺在 `DIARY/` 根，靠 `type` 字段过滤
-- **同一天可有 1 个 log + N 个 atom**
+- **不建子目录**——所有文件平铺在 `DIARY/` 根，靠 `type` + `subtype` 字段过滤
+- **同一天可有 1 个 log + N 个 card**
 
-### 5.2 Atom Frontmatter Schema
+### 5.2 Card Frontmatter Schema
 
 ```yaml
 ---
-type: diary-atom
-subtype: 灵感                              # 灵感 | 反思 | 教训 | 金句 | 文摘
-                                           # （任务类内容 → TASK，不放 diary）
+type: diary
+subtype: card                              # 固定为 card（区别于无 subtype 的容器日志）
+# 旧的 灵感/反思/教训/金句/文摘 分类 → 已改用 tags（如 tags: [灵感]）；任务类内容 → TASK，不放 diary
 created: YYYY-MM-DD HH:mm:ss
 importance: 3                              # 1–5
 # --- SR 算法状态（建议在 OB Properties 设置里批量隐藏 sr_* 前缀字段）---
@@ -219,13 +219,15 @@ last_visited:                              # 最近一次打开时间
 > **字段命名约定与历史**：
 > - **2026-05-18**：SR 状态字段统一加 `sr_` 前缀，便于在 OB Properties 里批量隐藏。
 > - **2026-05-19 v2**：算法整体重写为「按钮 1-4 = 当日反复巩固 / 按钮 5 = 跨日推进」双层模型，详见 §5.3。同时删除 `sr_interval` / `sr_archived` / `sr_last_review` / `promoted_to`（晋升机制取消）。
+> - **2026-05-20 v3**：type/subtype 字段规整。`diary-log`/`diary-card` 合并为统一 `type: diary`，容器日志无 subtype、原子卡 `subtype: card`；旧的 灵感/反思/教训/金句/文摘 子类型迁入 `tags`。TASK 的 `kind` 字段更名为 `subtype`（值 todo/reminder/shell 不变）。
 
 ### 5.3 SR 遗忘曲线算法（双层模型）
 
 > **权威定义**：[[INBOX/SR算法.md]]
 > **核心实现**：[[_scripts/sr-evaluate.js]]
-> **数据库**：[[DIARY/sr.base]]
-> **触发器**：[[_template/Diary Atom Template.md]] 内的 dataviewjs 按钮
+> **数据库**：[[sr.base]]（位于根目录，已与 DIARY 解绑——全库扫描凡带 `sr_next_review_datetime` 字段的笔记，便于将来用于 FAST 原子笔记）
+> **仪表盘**：[[SR Dashboard.md]]（根目录）
+> **触发器**：[[_template/Diary Card Templater.md]] 内的 dataviewjs 按钮
 
 **配置常量**：`SR触发间隔 = 15 分钟`（同时硬编码于模板与 sr-evaluate.js）。
 
@@ -260,31 +262,32 @@ sr_review_count += 1
 
 间隔阶梯（按按钮 5 第 N 次点击计）：**1 → 2 → 4 → 8 → 16 → 32 → 64 → 128 …** 天
 
-**写入后**：sr-evaluate.js 自动打开 [[DIARY/sr.base]] 首行记录；队列空则关闭当前页面。
+**写入后**：sr-evaluate.js 自动打开 [[sr.base]] 首行记录；队列空则关闭当前页面。
 
 ### 5.4 视图入口
 
 - **Bases**：
-  - [[DIARY/sr.base]] — SR 待复习队列（已逾期 top 20）
+  - [[sr.base]] — SR 待复习队列（根目录，全库扫描带 `sr_next_review_datetime` 的笔记，已逾期 top 20）
+  - [[SR Dashboard.md]] — SR 仪表盘（根目录，嵌入待复习 / 逾期 / 新建未复习）
   - [[DIARY/diary.base]] — 综合视图（今日复习 / 逾期 / 高价值低曝光 / 新建未复习 / 全部）
-- **Dataview**：`FROM "DIARY" WHERE type = "diary-atom"`
+- **Dataview**：`FROM "DIARY" WHERE type = "diary" AND subtype = "card"`
 
 ### 5.5 模板
 
-- [[Diary Log Template]] — 当天容器
-- [[Diary Atom Template]] — 一个想法一张卡（含 SR 按钮）
+- [[Diary Template]] — 当天容器
+- [[Diary Card Templater]] — 一个想法一张卡（含 SR 按钮）
 
 ### 5.6 Claudian 操作约定
 
 - 用户写下闪念时：判断是「容器内容」还是「值得长期复习的原子」，倾向**拆成 atom**。
-- AI 自动新建 atom 时：必须套用 [[Diary Atom Template]]，由模板填全 SR frontmatter。
+- AI 自动新建 atom 时：必须套用 [[Diary Card Templater]]，由模板填全 SR frontmatter。
 - **复习评分由用户在笔记页面点击按钮完成**，AI 一般不代劳。若用户在对话里口头评分（如 "/sr 3"），必须用 `processFrontMatter` 等价更新（参照 §5.3 公式），**不允许批量延后写入**——上一张未落盘前不进入下一张。
 
 > ⚠️ **历史教训（2026-05-15）**：曾经发生过"对话里报了新数值但未写入文件"的事故，下次复习时所有卡片状态仍是初始值。**禁止只口头反馈不落盘**。
 
 ### 5.7 `/diary-lint` 健康检查（只报告，不自动修复）
 
-扫描 `DIARY/` 所有 `diary-atom` 文件，输出报告至 `DIARY/logs/lint-YYYY-MM-DD.md`。
+扫描 `DIARY/` 所有 `type: diary` + `subtype: card` 文件，输出报告至 `DIARY/logs/lint-YYYY-MM-DD.md`。
 
 **A. 时间逻辑**
 - `sr_next_review_datetime` 早于 today − 14 天且 `sr_review_count == 0`（新建后从未复习，堆积超 2 周）
@@ -294,23 +297,24 @@ sr_review_count += 1
 **B. Schema 完整性**
 - 缺必填字段：`type` / `sr_review_count` / `sr_next_review_datetime` / `importance` / `subtype` / `created`
 - `importance` ∉ [1, 5]
-- `subtype` ∉ {灵感, 反思, 教训, 金句, 文摘}（出现 `长期TODO` 即报警，应迁移到 TASK）
-- `type` ∉ {diary-log, diary-atom}
+- `subtype` ∉ {card}（原 灵感/反思/教训/金句/文摘 已迁至 tags）
+- `type` ∉ {diary}
 - **遗留旧字段**：出现 `sr_interval` / `sr_archived` / `sr_last_review` / `promoted_to` / 裸 `review_count`/`next_review` 等 2026-05-19 v2 前的残留，需迁移或删除
 
 **C. 文件命名**
 - 不符合 `YYYY-MM-DD …` 前缀格式
-- `diary-log` 文件名带 slug（应只有日期）
-- `diary-atom` 文件名只有日期（应有 slug）
+- 容器日志（`type: diary` 无 subtype）文件名带 slug（应只有日期）
+- 原子卡（`subtype: card`）文件名只有日期（应有 slug）
 
 **D. 浏览统计**
 - `views > 0` 但 `last_visited` 为空（或反之）
 - `views` 非整数
 
 **E. Base 配置健康**
-- `diary.base` / `sr.base` 的 filter 用 `file.folder.startsWith(...)` 而非 `== "DIARY"`（会把 `_template/` 和 `logs/` 内污染文件混入）
-- `_template/Diary Atom Template.md` 自身被 base 列出（过滤器漏防）
-- 出现非根目录的 `diary-atom` 文件（应平铺在 `DIARY/` 根，不该在 `logs/` 等子目录）
+- `diary.base` 的 filter 用 `file.folder.startsWith(...)` 而非 `== "DIARY"`（会把 `_template/` 和 `logs/` 内污染文件混入）
+- `sr.base`（根目录，已与 DIARY 解绑）的 filter 应为「`sr_next_review_datetime` 存在且 `< now()` 且 `file.folder != "_template"`」的全库扫描；若退回 `file.folder == "DIARY"` 则失去 FAST 原子笔记的扩展能力
+- `_template/Diary Card Templater.md` 自身被 base 列出（过滤器漏防——模板里的 `<% %>` 表达式应使其不匹配日期过滤）
+- 出现非根目录的原子卡（`subtype: card`）文件（应平铺在 `DIARY/` 根，不该在 `logs/` 等子目录）
 
 **输出后**：等用户确认是否逐条修复，**不自动改文件**。
 
@@ -330,7 +334,7 @@ Frontmatter schema：
 ```yaml
 ---
 type: task
-kind: todo               # todo | reminder | shell（默认 todo，三类任务，见下）
+subtype: todo               # todo | reminder | shell（默认 todo，三类任务，见下）
 title:
 priority: 3              # 1(低) ~ 5(紧急) 默认 3 —— 与 diary.importance 同方向（数大=重要）
 status: backlog          # backlog | active | blocked | done | cancelled
@@ -338,16 +342,16 @@ created: YYYY-MM-DD
 due:                     # YYYY-MM-DD，可选
 tags: []
 dependencies: []         # 可填 "[[task-slug]]"
-# --- kind 相关可选字段（仅展示/排序用，真正触发靠正文内联语法）---
+# --- subtype 相关可选字段（仅展示/排序用，真正触发靠正文内联语法）---
 remind_at:               # reminder 任务的提醒时间（YYYY-MM-DD HH:mm，可选）
 schedule:                # shell 任务的调度时间说明（可选）
 script:                  # shell 任务执行的脚本路径（可选）
 ---
 ```
 
-**三类任务（`kind`）**：
+**三类任务（`subtype`）**：
 
-| kind | 含义 | 触发方式 | 正文内联语法 |
+| subtype | 含义 | 触发方式 | 正文内联语法 |
 |------|------|---------|-------------|
 | `todo` | 简单待办，给用户自己看 / 执行 | 人工 | 普通 `- [ ]` 清单 |
 | `reminder` | 到点提醒用户去做 | **OB Reminder 插件** | `- [ ] 内容 (@YYYY-MM-DD HH:mm)` |
@@ -368,19 +372,19 @@ script:                  # shell 任务执行的脚本路径（可选）
 ### 6.3 task.base 视图
 
 - **概览** — status ≠ done/cancelled，带类型图标 + 优先级标签，按优先级 + 截止排序
-- **① 简单待办** — kind == todo
-- **② 提醒任务** — kind == reminder，按 remind_at 排序
-- **③ 自动执行** — kind == shell，显示 schedule / script 列
+- **① 简单待办** — subtype == todo
+- **② 提醒任务** — subtype == reminder，按 remind_at 排序
+- **③ 自动执行** — subtype == shell，显示 schedule / script 列
 - **逾期** — due < today，还未完成
 - **本周截止** — due ∈ [today, today+7)
 - **已完成** — status == done，反向时间序
 - **状态分组卡片** — `groupBy: status` 卡片视图
 
-> 配套仪表盘 [[TASK/Task Dashboard.md]]：用 `![[task.base#视图]]` 嵌入以上视图，仿 [[DIARY/SR Dashboard.md]]。
+> 配套仪表盘 [[TASK/Task Dashboard.md]]：用 `![[task.base#视图]]` 嵌入以上视图，仿 [[SR Dashboard.md]]。
 
-### 6.4 vs diary-atom 的区别
+### 6.4 vs diary card 的区别
 
-| 维度 | diary-atom | task |
+| 维度 | diary card | task |
 |------|-----------|------|
 | **周期** | 遗忘曲线（间隔复习） | 优先级 + 截止（线性推进） |
 | **目标** | 防止遗忘，强化记忆 | 推进完成，交付价值 |
@@ -399,15 +403,15 @@ script:                  # shell 任务执行的脚本路径（可选）
 **B. Schema / 字段范围**
 - `priority` ∉ [1, 5]
 - `status` ∉ {backlog, active, blocked, done, cancelled}
-- `kind` ∉ {todo, reminder, shell}（缺失按 todo，但应显式补全）
+- `subtype` ∉ {todo, reminder, shell}（缺失按 todo，但应显式补全）
 - `due` 格式非 `YYYY-MM-DD`
-- 缺必填：`type`、`kind`、`priority`、`status`、`created`
+- 缺必填：`type`、`subtype`、`priority`、`status`、`created`
 
-**B2. kind 与正文一致性**
-- `kind: reminder` 但正文无 `(@时间)` 内联语法（提醒不会触发）
-- `kind: shell` 但正文无 `(@时间) [shell: …]` 语法（脚本不会触发）
-- 正文含 `[shell: …]` 但 `kind ≠ shell`（分类错误，应改为 shell）
-- `kind: shell` 的 `script` 指向不存在的脚本文件（死链）
+**B2. subtype 与正文一致性**
+- `subtype: reminder` 但正文无 `(@时间)` 内联语法（提醒不会触发）
+- `subtype: shell` 但正文无 `(@时间) [shell: …]` 语法（脚本不会触发）
+- 正文含 `[shell: …]` 但 `subtype ≠ shell`（分类错误，应改为 shell）
+- `subtype: shell` 的 `script` 指向不存在的脚本文件（死链）
 
 **C. 依赖完整性**
 - `dependencies` 里的 `[[task-slug]]` 死链
