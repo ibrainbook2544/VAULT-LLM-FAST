@@ -77,11 +77,11 @@ Once open, start from [`index.md`](index.md), or jump straight into [`DIARY/diar
 
 ```
 Browsing / clipping ──→ INBOX/Clippings/
-Daily thoughts      ──→ DIARY/YYYY-MM-DD.md  (diary-log)
+Daily thoughts      ──→ DIARY/YYYY-MM-DD.md  (type: diary, no subtype)
                               │
                               │  split when worth long-term retention
                               ▼
-                       Atom cards (diary-card)
+                       Cards (type: diary + subtype: card)
                               │
                               │  ─→ spaced-repetition queue (1/2/4/8/16/32/64/128 days)
                               │
@@ -147,9 +147,9 @@ LLM-FAST/
 | **QuickAdd** | Quick creation of atoms / tasks |
 | **Obsidian Git** | Auto-backup commits to GitHub |
 | **Obsidian Tasks** | Task management for TASK |
-| **Reminder** | Atom card review reminders |
+| **Reminder** | Card review reminders |
 | **Update Time on Edit** | Automatic `updated` field maintenance |
-| **Calendar** | Calendar view for opening diary-logs |
+| **Calendar** | Calendar view for opening diary logs |
 
 ### Frontmatter spec
 

@@ -144,7 +144,7 @@ LLM-FAST/
 ├── _template/                   # 模板
 │   ├── Diary Template.md
 │   ├── Diary Card Templater.md
-│   ├── SR Reminder Templater.md
+│   ├── SR Reminder Template.md
 │   └── Task Template.md
 ├── _scripts/                    # 脚本
 │   ├── sr-evaluate.js

@@ -1,11 +1,18 @@
 ---
 sr_review_count: 0
-sr_next_review_datetime: <% moment().add(15, "minutes").format("YYYY-MM-DD HH:mm:ss") %>
+sr_next_review_datetime:
 ---
+
 ```dataviewjs
 (async () => {
     const DT_FMT = "YYYY-MM-DD HH:mm:ss";
     const file = app.vault.getAbstractFileByPath(dv.current().file.path);
+
+    // 护栏：在 _template/ 里（即打开模板本身）时不执行，避免污染模板
+    if (file.path.startsWith("_template/")) {
+        dv.paragraph("📋 模板预览：基于此模板新建笔记后，SR 属性会自动补齐。");
+        return;
+    }
 
     async function ensureSrFields() {
         const fm = app.metadataCache.getFileCache(file)?.frontmatter ?? {};

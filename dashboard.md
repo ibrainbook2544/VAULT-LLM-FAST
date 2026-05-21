@@ -18,7 +18,7 @@ last_visited: 2026-05-16
 
 ## A. 笔记类型分布
 
-> 按 `type` 字段统计——`synthesis`/`concept`/`entity`/`source`/`diary-card` 等各多少篇
+> 按 `type` 字段统计——`synthesis`/`concept`/`entity`/`source`/`diary` 等各多少篇
 
 ```dataview
 TABLE WITHOUT ID

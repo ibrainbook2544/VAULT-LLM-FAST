@@ -1,23 +1,48 @@
-你是 Claudian，LLM-FAST vault 的 AI 助手。现在执行每日自动 Diary Lint 健康检查（参考 AGENTS.md §5.9）。
+你是 Claudian，LLM-FAST vault 的 AI 助手。现在执行每日自动 Diary Lint 健康检查（依据 AGENTS.md §5.7，2026-05-20 v3 schema）。
+
+当前 DIARY schema：
+- 容器日志：type: diary（无 subtype），文件名仅 YYYY-MM-DD.md，不进入复习。
+- 原子卡片：type: diary + subtype: card，文件名 YYYY-MM-DD <slug>.md，进入 SR 复习队列。
+- SR 字段：sr_review_count（整数，仅按钮 5 累加）/ sr_next_review_datetime（格式 YYYY-MM-DD HH:mm:ss）。
+- 旧的 灵感/反思/教训/金句/文摘 已迁入 tags；不再有 diary-log / diary-card / kind / interval / archived 等旧字段。
 
 执行步骤：
 1. 用 Bash 获取今天日期：date +%Y-%m-%d
-2. 扫描 DIARY/ 根目录下所有 frontmatter 含 type: diary-card 的 .md 文件（不扫描子目录）
-3. 对每个文件执行以下检查：
+2. 扫描 DIARY/ 根目录下所有 .md（不扫描 logs/ 等子目录）。按 frontmatter 分类：
+   - 原子卡 = subtype == card
+   - 容器日志 = type == diary 且无 subtype
+3. 按下列分节检查（只检查相应类别）：
 
-A. 状态不一致：review_count>0但last_review空 / review_count==0但last_review非空 / last_review晚于next_review / next_review不等于last_review+interval天 / archived==true但next_review<=today
-B. Schema完整性：缺type/interval/next_review/importance/subtype / interval不在{1,2,4,8,16,32,64,128} / importance不在[1,5] / subtype不在{灵感,反思,教训,金句,文摘}
-C. 文件命名：不符合YYYY-MM-DD前缀 / diary-card无slug / diary-log带slug
-D. 晋升一致性：promoted_to死链 / archived+promoted_to但正文超5行 / promoted_to非空但archived==false
-E. 长期堆积：archived==false且next_review早于today-14天
-F. Base健康：_template/下有diary-card混入 / DIARY/logs/子目录下有diary-card
+A. 时间逻辑（原子卡）：
+   - sr_next_review_datetime 早于 today−14 天 且 sr_review_count == 0（新建后从未复习，堆积超 2 周）
+   - sr_next_review_datetime 早于 today−30 天（长期未处理）
+   - sr_next_review_datetime 不可解析为 `YYYY-MM-DD HH:mm:ss`
 
-4. 将报告写入 DIARY/logs/lint-{今日日期}.md，格式：
-# Diary Lint Report · {今日日期}
-## 汇总
-- 扫描文件数：X 个
-- 发现问题：Y 条
-- 生成时间：自动（每日 02:00）
-各节 A~F（0条时写 ✅ 无问题）
+B. Schema 完整性（原子卡）：
+   - 缺必填字段：type / subtype / created / importance / sr_review_count / sr_next_review_datetime
+   - importance 不是 1–5 的整数
+   - type ≠ diary
+   - subtype ≠ card（旧 灵感/反思/… 应迁至 tags）
+   - 出现遗留旧字段：sr_interval / sr_archived / sr_last_review / promoted_to / 裸 review_count / next_review / interval / last_review / archived
 
-重要：只写报告文件，不修改任何 diary-card 文件。
+C. 文件命名（卡片 + 日志）：
+   - 不符合 YYYY-MM-DD 前缀
+   - 原子卡文件名只有日期（缺 slug）
+   - 容器日志文件名带 slug（应只有日期）
+
+D. 浏览统计（原子卡）：
+   - views > 0 但 last_visited 为空（或反之：有 last_visited 但 views 为 0/空）
+   - views 非整数
+
+E. Base 配置健康：
+   - DIARY/diary.base 的 filter 用 file.folder.startsWith(...) 而非 file.folder == "DIARY"，或缺少 note.subtype == "card"
+   - 根目录 sr.base 的 filter 应为「sr_next_review_datetime 存在 且 < now() 且 file.folder != "_template"」的全库扫描；若退回 file.folder == "DIARY" 则报警
+   - _template/Diary Card Templater.md 自身被 base 列出（模板内 `<% %>` 表达式应使其不匹配日期过滤）
+   - DIARY/ 子目录（如 logs/）下出现 subtype: card 的原子卡（应平铺在根目录）
+
+4. 将报告写入 DIARY/logs/lint-{今日日期}.md，结构：
+   # Diary Lint Report · {今日日期}
+   ## 汇总（扫描总数 / 原子卡数 / 容器日志数 / 其他 / 问题数 / 生成时间）
+   ## A. 时间逻辑 ～ ## E. Base 配置健康（每节列出问题，0 条时写 ✅ 无问题）
+
+重要：只写报告文件，不修改任何 diary 笔记或 base 文件。

@@ -239,7 +239,7 @@ class SrReminderPlugin extends obsidian.Plugin {
 
     // ⚡ 关键：用 metadataCache（零 IO，O(n) 内存查询）
     // SR 已与 DIARY 解绑：全库扫描凡带 sr_next_review_datetime 字段的笔记
-    // （diary-card 或将来的 FAST 原子笔记），仅排除模板目录，避免 <% %> 占位污染队列。
+    // （diary card 或将来的 FAST 原子笔记），仅排除模板目录，避免 <% %> 占位污染队列。
     for (const file of this.app.vault.getMarkdownFiles()) {
       if (file.parent?.path === EXCLUDE_FOLDER) continue;
 

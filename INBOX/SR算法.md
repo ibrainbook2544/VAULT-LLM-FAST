@@ -104,7 +104,7 @@ for (const r of RATINGS) {
 
 ## SR数据库：`sr.base`（根目录）
 
-> 2026-05-20 起：SR 已与 `Diary Card` 解绑，`sr.base` 与 `SR Dashboard.md` 移至**仓库根目录**，按全库扫描。凡带 `sr_next_review_datetime` 字段的笔记（现为 diary-card，将来可用于 FAST 原子笔记）均纳入队列。
+> 2026-05-20 起：SR 已与 `Diary Card` 解绑，`sr.base` 与 `SR Dashboard.md` 移至**仓库根目录**，按全库扫描。凡带 `sr_next_review_datetime` 字段的笔记（现为 diary card，将来可用于 FAST 原子笔记）均纳入队列。
 
 全库内凡带 `sr_next_review_datetime` 字段的笔记（排除 `_template/` 模板目录），按照 `sr_next_review_datetime` 倒序排列，列出 `sr_next_review_datetime` 小于当前日期时间之前的20个记录。
 

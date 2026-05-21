@@ -75,7 +75,7 @@ WHERE views > 0
   AND !contains(file.folder, "raw")
   AND !contains(file.folder, "logs")
   AND file.path != "VAULT-INBOX/Inbox.md"
-  AND type != "diary-log"
+  AND (type != "diary" OR subtype = "card")
 SORT views DESC
 LIMIT 20
 ```
@@ -98,7 +98,7 @@ WHERE file.name != "index"
   AND !contains(file.folder, "raw")
   AND !contains(file.folder, "logs")
   AND file.path != "VAULT-INBOX/Inbox.md"
-  AND type != "diary-log"
+  AND (type != "diary" OR subtype = "card")
   AND archived != true
 SORT views ASC, last_visited ASC, file.mtime ASC
 LIMIT 20

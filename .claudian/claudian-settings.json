@@ -80,7 +80,7 @@
   },
   "savedProviderPermissionMode": {
     "claude": "yolo",
-    "codex": "yolo"
+    "codex": "normal"
   },
   "lastCustomModel": "",
   "maxTabs": 3,
