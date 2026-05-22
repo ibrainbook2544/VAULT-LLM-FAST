@@ -558,7 +558,7 @@ cd LLM-FAST
 
 我在平时浏览网页时，会随手把内容不错、值得收藏或认真研读的网页（尤其是 Youtube 视频）加入到书签栏中。
 
-> **注意**：不建目录！
+> **注意**：不建书签栏目录！就放在最外层，这样最醒目。
 
 书签栏天然具有"看着碍眼、不清空不舒服"的心理压力，这种紧迫感是驱动整理的动力——善用它。书签不需要额外提醒，视觉压迫本身就是提醒。
 
@@ -642,9 +642,9 @@ cd LLM-FAST
 ---
 ### 致谢
 
-- [Andrej Karpathy](https://karpathy.github.io/)：LLM Wiki 范式启发
-- **Tiago Forte**：第二大脑 CODE（Capture-Organize-Distill-Express）
-- **Zettelkasten**：Fleeting → Literature → Permanent
+- [Andrej Karpathy](https://karpathy.github.io/)：`LLM Wiki` 范式启发
+- **Tiago Forte**：第二大脑 `CODE（Capture-Organize-Distill-Express）`
+- **Zettelkasten**：`Fleeting → Literature → Permanent`
 
 ---
 ### 许可
