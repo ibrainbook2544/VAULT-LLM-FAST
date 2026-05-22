@@ -290,7 +290,6 @@ Supports input anytime, anywhere, including voice memos:
 - Paid option: `OB Sync` (official, stable)
 - Free option: `Syncthing` (direct LAN connection, zero cost)
 
-
 ### Diary: The Process & Memory Layer
 
 It uses a two-layer model; all files lie flat under the `DIARY/` root, distinguished by `frontmatter`:
@@ -527,6 +526,8 @@ Log filenames support two formats:
 ---
 ## Installation
 
+### Download Git Repository：`LLM-FAST`
+
 ```bash
 # 1. Clone the repository
 git clone git@github.com:ibrainbook2544/VAULT-LLM-FAST.git LLM-FAST
@@ -538,6 +539,15 @@ cd LLM-FAST
 # 3. Turn off Restricted mode and enable community plugins
 #    Settings → Community plugins → enable the required plugins
 ```
+
+
+#### Install the Sync Tool `Syncthing`
+
+1. Install [Syncthing](https://syncthing.net/downloads/) on both your computer and phone.
+
+2. Configure `Syncthing`: map the computer folder (e.g. `VAULT-LLM-FAST\INBOX`) → to the phone folder (e.g. `INBOX`).
+
+3. Once sync is confirmed working, install Obsidian on your phone, open OB, and choose **Open existing vault** (e.g. `INBOX`).
 
 
 ---

@@ -492,15 +492,18 @@ logs/
 ---
 ## 前置要求
 
-| 工具                                    | 版本     | 用途       |
-| ------------------------------------- | ------ | -------- |
-| [Obsidian](https://obsidian.md/)      | ≥ 1.7  | 知识库管理    |
-| [Git](https://git-scm.com/)           | ≥ 2.30 | 版本控制     |
-| [Claude Code](https://claude.ai/code) | 最新     | AI 编译与维护 |
-| [Codex](https://chatgpt.com/codex)    | 最新     | AI 编译与维护 |
+| 工具                                            | 版本     | 用途       |
+| --------------------------------------------- | ------ | -------- |
+| [Obsidian](https://obsidian.md/)              | ≥ 1.7  | 知识库管理    |
+| [Git](https://git-scm.com/)                   | ≥ 2.30 | 版本控制     |
+| [Claude Code](https://claude.ai/code)         | 最新     | AI 编译与维护 |
+| [Codex](https://chatgpt.com/codex)            | 最新     | AI 编译与维护 |
+| [OB Web Clipper](https://obsidian.md/clipper) | 最新     | Chrome扩展 |
 
 ---
 ## 安装
+
+### 下载Git仓库 `LLM-FAST`
 
 ```bash
 # 1. 克隆仓库
@@ -513,6 +516,16 @@ cd LLM-FAST
 # 3. 关闭 Restricted mode，启用社区插件
 #    Settings → Community plugins → 启用所需插件
 ```
+
+
+### 安装同步工具 `Syncthing`
+
+1. 在电脑和手机分别安装同步工具 [Syncthing](https://syncthing.net/downloads/) 
+
+2. 设置 `Syncthing`：电脑文件夹（比如 `VAULT-LLM-FAST\INBOX`）=》手机文件夹（比如 `INBOX`）
+
+3. 确认同步成功后，手机端安装 Obsidian，然后打开 OB，选择打开已有仓库 仓库（比如 `INBOX`）
+
 
 ---
 ## 配置

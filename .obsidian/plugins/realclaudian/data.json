@@ -11,10 +11,11 @@
         "conversationId": null
       },
       {
+        "draftModel": "sonnet",
         "tabId": "tab-1779488461840-wqxlf8p",
-        "conversationId": "conv-1779488527810-hyf5vhcu0"
+        "conversationId": null
       }
     ],
-    "activeTabId": "tab-1779488461840-wqxlf8p"
+    "activeTabId": "tab-1779255786806-v7p81hn"
   }
 }
