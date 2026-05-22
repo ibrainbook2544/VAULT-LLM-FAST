@@ -1,253 +1,248 @@
----
-views: 1
-last_visited: 2026-05-22 00:38:04
-created: 2026-05-22 00:37:49
-updated: 2026-05-22 00:42:19
-contentHash: 357b73877f81b3e97eb1f848e1fb7667d52da487340b33f9dbd49f532cf70922
----
 
-## FAST 6+1 维度扩展 —— 分子化、综合过程
+> 🌐 Chinese version: [[FAST（Full Area Stack Tree）.zh-CN]]
 
-> 这一步最重要！是 **LLM-FAST** 的核心步骤。它决定了整个 FAST 分子笔记本的内容是否具备了**真实性、正确性、完整性**。
+## FAST 6+1 Dimensional Expansion — Molecularization & Synthesis Process
 
-### 为什么说这一步最重要？
+> This is the most critical step! It is the **core step** of **LLM-FAST**. It determines whether the entire FAST molecular notebook achieves **authenticity, correctness, and completeness**.
 
-在整个 LLM-FAST 流程中，AI Learning 负责"广度采集"，人脑 Thinking 负责"深度判断"，而 **6+1 维度扩展** 是将两者整合为结构化知识网的唯一枢纽。
+### Why Is This Step the Most Critical?
 
-跳过这一步，你得到的只是一堆高质量的碎片；完成这一步，你得到的是一座可以不断生长的知识宫殿。
+In the entire LLM-FAST workflow, AI Learning handles "breadth collection," human Thinking handles "depth judgment," and the **6+1 Dimensional Expansion** is the sole pivot that integrates both into a structured knowledge network.
 
-**三个风险锁定在这一步被解除：**
+Skip this step, and you get a pile of high-quality fragments. Complete this step, and you get a knowledge palace that can grow indefinitely.
 
-|风险|如何在 6+1 中解除|
+**Three risks are eliminated at this step:**
+
+| Risk | How 6+1 Eliminates It |
 |---|---|
-|**虚假性**（AI 幻觉）|Backward + Opposite 维度强制追溯来源与边界，暴露无根据的断言|
-|**片面性**（一叶障目）|Superior + Lateral 维度强制建立全局坐标，消除视角盲区|
-|**过时性**（僵化知识）|Forward 维度强制追问替代者与演化方向，阻止知识钙化|
+| **Falsity** (AI hallucination) | Backward + Opposite dimensions force tracing back to sources and boundaries, exposing ungrounded assertions |
+| **Partiality** (tunnel vision) | Superior + Lateral dimensions force establishment of a global coordinate system, eliminating perspective blind spots |
+| **Obsolescence** (ossified knowledge) | Forward dimension forces inquiry into successors and evolutionary direction, preventing knowledge calcification |
 
-### FAST 6+1 维度的本质
+### The Essence of FAST 6+1 Dimensions
 
-6+1 维度不是一份问题清单，而是一套**空间定位系统**。
+The 6+1 dimensions are not a checklist — they are a **spatial positioning system**.
 
-任何一个知识节点，都可以被放入这个三维坐标中精确定位：
+Any knowledge node can be precisely located in this three-dimensional coordinate system:
 
 ```
-              Superior（上）
+              Superior (Up)
                    ↑
-    Backward（后）←  知识节点  → Forward（前）
-                   ↓
-              Inferior（下）
+    Backward ←  Knowledge Node  → Forward
+    (Behind)         ↓            (Ahead)
+              Inferior (Down)
 
-    Lateral（左）  ↔  知识节点  ↔  Opposite（右）
+    Lateral (Left)  ↔  Knowledge Node  ↔  Opposite (Right)
 
-    + Associated Connections（相关连接）：跨域漫游
+    + Associated Connections: cross-domain roaming
 ```
 
-没有坐标就没有位置，没有位置就无法建图，无法建图就无法形成**知识网（FAST-LLM-Wiki）**。
+Without coordinates there is no position; without position there is no mapping; without mapping there is no **knowledge network (FAST-LLM-Wiki)**.
 
-### 七个维度的分子化操作详解
+### Detailed Molecularization Operations for the Seven Dimensions
 
-#### ① 向上 Superior —— 溯源 · 归属 · 大局观
+#### ① Upward — Superior: Tracing Origins · Attribution · Big Picture
 
-**核心追问**：它在哪里？它属于哪个父级领域？它解决的是哪一类问题？
+**Core Question**: Where does it belong? What parent domain does it fall under? What class of problems does it solve?
 
-**分子化操作**：
+**Molecularization Operations**:
 
-- 找到该知识节点的**直接父节点**（所属学科/领域/范式）
-- 继续向上溯源，直到触及**第一原理或通用范式**
-- 标记该节点在整棵知识树中的**层级编号**
+- Find the **direct parent node** (belonging discipline/domain/paradigm)
+- Continue tracing upward until reaching **first principles or a universal paradigm**
+- Mark the node's **hierarchical position** in the entire knowledge tree
 
-**综合判断**：若一个知识点找不到父节点，说明它要么是伪概念，要么你对该领域的宏观结构理解不足——这本身就是一个高价值信号。
+**Synthesis Judgment**: If a knowledge point has no parent node, it is either a pseudo-concept, or your understanding of the macro-structure of the field is insufficient — this in itself is a high-value signal.
 
-**示例**（以"Transformer 注意力机制"为例）：
-
-```
-注意力机制
-  → 父级：序列建模架构
-    → 父级：深度学习
-      → 父级：机器学习
-        → 父级：人工智能
-```
-
-#### ② 向下 Inferior —— 拆解 · 包含 · 二八定律
-
-**核心追问**：它由什么组成？哪 20% 的子结构承载了 80% 的功能？
-
-**分子化操作**：
-
-- 列出该知识节点的**所有一级子组件**（不要急于递归深挖）
-- 用二八定律标注：哪些子组件是**核心骨架**，哪些是**可选扩展**
-- 对核心子组件做第二层拆解，形成**两层分子结构**
-
-**综合判断**：向下维度最大的陷阱是"无限深挖"——每进一层，投入产出比急剧下降。正确做法是先铺满第一层，再选择性下探最关键的子节点。
-
-**示例**：
+**Example** (using "Transformer Attention Mechanism"):
 
 ```
-注意力机制（Attention）
-  ├── ★ Query/Key/Value 矩阵（核心骨架）
-  ├── ★ Scaled Dot-Product（核心骨架）
-  ├── ★ Multi-Head 机制（核心骨架）
-  ├── Positional Encoding（重要扩展）
-  └── Masking 策略（场景相关）
+Attention Mechanism
+  → Parent: Sequence Modeling Architectures
+    → Parent: Deep Learning
+      → Parent: Machine Learning
+        → Parent: Artificial Intelligence
 ```
 
-#### ③ 向前 Forward —— 趋势 · 演化 · 替代者
+#### ② Downward — Inferior: Decomposition · Composition · 80/20 Rule
 
-**核心追问**：谁可能替代它？它正在向哪个方向演化？5年后它还存在吗？
+**Core Question**: What is it composed of? Which 20% of sub-structures carry 80% of the functionality?
 
-**分子化操作**：
+**Molecularization Operations**:
 
-- 搜索该领域**最新论文/技术报告**（交由 AI Learning 完成）
-- 识别**正在涌现的竞争性替代技术**
-- 标记当前节点的**生命周期状态**：萌芽 / 成长 / 成熟 / 衰退
+- List all **first-level sub-components** (do not rush into recursive deep-diving)
+- Apply the 80/20 rule to annotate: which sub-components are **core skeleton**, which are **optional extensions**
+- Perform a second-layer decomposition on core sub-components, forming a **two-layer molecular structure**
 
-**综合判断**：Forward 维度是对抗"知识过时"最直接的武器。一个不追问 Forward 的学习者，永远在学昨天的世界。
+**Synthesis Judgment**: The biggest pitfall of the Inferior dimension is "infinite deep-diving" — the deeper you go, the sharper the drop in ROI. The correct approach is to lay out the full first layer, then selectively explore the most critical sub-nodes.
 
-**示例**：
-
-```
-注意力机制 → 向前演化路径
-  ├── Sparse Attention（成本优化方向）
-  ├── Linear Attention（效率替代方向）
-  ├── State Space Models / Mamba（架构级替代候选）
-  └── 混合架构（Attention + SSM 融合趋势）
-```
-
-#### ④ 向后 Backward —— 历史 · 来源 · 痛点
-
-**核心追问**：它从哪个知识点演化而来？它是为了解决什么痛点而诞生的？
-
-**分子化操作**：
-
-- 追溯该知识节点的**直接历史前驱**（前一代技术/理论）
-- 明确它诞生时所针对的**核心痛点或失败场景**
-- 梳理**关键演化事件时间线**（不超过 5 个节点）
-
-**综合判断**：不理解 Backward，就无法真正理解一个概念为何"长成这个形状"。历史脉络是最强的理解加速器，也是判断 AI 输出真实性的重要参照系。
-
-**示例**：
+**Example**:
 
 ```
-注意力机制 ← 向后溯源
-  ← RNN/LSTM 的长程依赖消失问题（痛点）
-    ← 序列到序列模型（Seq2Seq）的信息瓶颈（痛点）
-      ← 2015 Bahdanau Attention 论文（直接前驱）
-        ← 2017 "Attention Is All You Need"（关键演化事件）
+Attention Mechanism
+  ├── ★ Query/Key/Value Matrices (core skeleton)
+  ├── ★ Scaled Dot-Product (core skeleton)
+  ├── ★ Multi-Head Mechanism (core skeleton)
+  ├── Positional Encoding (important extension)
+  └── Masking Strategies (context-dependent)
 ```
 
-#### ⑤ 向左 Lateral —— 对比 · 竞品 · 护城河
+#### ③ Forward: Trends · Evolution · Successors
 
-**核心追问**：谁和它像？它的核心竞争力是什么？护城河在哪里？
+**Core Question**: Who might replace it? In which direction is it evolving? Will it still exist in 5 years?
 
-**分子化操作**：
+**Molecularization Operations**:
 
-- 列出**同一层级的竞品/替代方案**（至少 3 个）
-- 用**对比矩阵**标注各方案的核心差异维度
-- 提炼该节点相对竞品的**不可替代性**（护城河）
+- Search the **latest papers/technical reports** in the field (delegate to AI Learning)
+- Identify **emerging competitive replacement technologies**
+- Mark the current node's **lifecycle stage**: Emerging / Growing / Mature / Declining
 
-**综合判断**：Lateral 是防止"用锤子看所有问题都是钉子"的解药。当你清楚地知道"在什么情况下用这个而不是那个"，你才真正拥有了这个知识。
+**Synthesis Judgment**: The Forward dimension is the most direct weapon against "knowledge obsolescence." A learner who never asks Forward questions is forever learning yesterday's world.
 
-**示例**：
-
-```
-注意力机制 vs 竞品对比
-  ┌──────────────┬──────────┬──────────┬──────────┐
-  │              │ Attention│ RNN/LSTM │   CNN    │
-  ├──────────────┼──────────┼──────────┼──────────┤
-  │ 长程依赖      │ ★★★★★ │   ★★★  │   ★★   │
-  │ 并行计算      │ ★★★★★ │   ★     │  ★★★★ │
-  │ 计算成本      │ O(n²)高   │  O(n)低  │  O(n)低  │
-  │ 可解释性      │   高      │   低     │   中     │
-  └──────────────┴──────────┴──────────┴──────────┘
-  护城河：全局上下文感知 + 并行训练效率
-```
-
-#### ⑥ 向右 Opposite —— 边界 · 禁忌 · 反面
-
-**核心追问**：它不是什么？在什么场景下用它是错的？它的失效条件是什么？
-
-**分子化操作**：
-
-- 明确该知识节点的**适用边界条件**
-- 列出**反面教材**：哪些常见误用/滥用场景
-- 标注**知识防火墙**：哪些相似概念容易被混淆
-
-> **专家与平庸者的分水岭**："知道一件事不是什么，比知道它是什么更重要。"
-
-**综合判断**：Opposite 是 6+1 中最容易被跳过、但价值密度最高的维度。AI 生成的内容几乎从不主动告诉你"什么时候不该用它"——这正是人脑 Thinking 最不可替代的贡献之一。
-
-**示例**：
+**Example**:
 
 ```
-注意力机制 ← Opposite 边界
-  ✗ 不适用：超长序列（O(n²)成本使其不可行）
-  ✗ 不适用：实时边缘推理（内存占用过高）
-  ✗ 常见误用：把"注意力机制"等同于"Transformer"（后者是更大的架构）
-  ✗ 常见混淆：Self-Attention vs Cross-Attention（作用对象不同）
-  防火墙：注意力权重 ≠ 因果解释，相关性 ≠ 可解释性
+Attention Mechanism → Forward Evolution Paths
+  ├── Sparse Attention (cost optimization direction)
+  ├── Linear Attention (efficiency replacement direction)
+  ├── State Space Models / Mamba (architecture-level replacement candidate)
+  └── Hybrid Architectures (Attention + SSM convergence trend)
 ```
 
-#### ⑦ 相关连接 Associated Connections —— 跨域映射 · 隐喻 · 随机游走
+#### ④ Backward: History · Origins · Pain Points
 
-**核心追问**：这个知识还能连接到哪些完全不同的领域？有什么隐喻可以帮助理解或传播它？
+**Core Question**: What knowledge did it evolve from? What pain points was it born to solve?
 
-**分子化操作**：
+**Molecularization Operations**:
 
-- 强制进行**至少 2 次跨域联想**（跳出本领域）
-- 寻找能显著降低理解门槛的**具象隐喻**
-- 探索可能产生**创新迁移**的跨域应用方向
+- Trace the node's **direct historical predecessor** (previous-generation technology/theory)
+- Clarify the **core pain points or failure scenarios** it was created to address
+- Outline the **key evolutionary event timeline** (no more than 5 nodes)
 
-**综合判断**：这是 FAST 模型的"熵增"时刻——不确定，不线性，但正是人类相对 AI 的核心护城河。AI 擅长域内精确检索，人脑擅长跨域随机漫游。两者结合，才能真正涌现洞见。
+**Synthesis Judgment**: Without understanding Backward, you cannot truly understand why a concept "grew into this shape." Historical context is the strongest comprehension accelerator, and an important reference system for judging the authenticity of AI output.
 
-**示例**：
-
-```
-注意力机制 ← 跨域连接
-  → 认知科学："有限注意力资源分配"——人类如何聚焦也是稀缺资源调度
-  → 经济学：注意力经济——信息过载时代中，注意力作为稀缺资本的配置逻辑
-  → 隐喻：聚光灯模型——注意力机制像一束可移动的聚光灯，而非均匀照亮整个舞台
-  → 迁移应用：推荐系统中的用户-物品 Cross-Attention 架构
-```
-
-### 6+1 综合过程：分子化的执行节奏
+**Example**:
 
 ```
-输入：某个知识节点（原子）
+Attention Mechanism ← Backward Tracing
+  ← RNN/LSTM long-range dependency vanishing problem (pain point)
+    ← Seq2Seq model information bottleneck (pain point)
+      ← 2015 Bahdanau Attention paper (direct predecessor)
+        ← 2017 "Attention Is All You Need" (key evolutionary event)
+```
+
+#### ⑤ Lateral: Comparison · Competitors · Moat
+
+**Core Question**: Who is similar to it? What is its core competitive advantage? Where is its moat?
+
+**Molecularization Operations**:
+
+- List **same-level competitors/alternatives** (at least 3)
+- Use a **comparison matrix** to annotate key differentiating dimensions
+- Distill the node's **irreplaceability** relative to competitors (moat)
+
+**Synthesis Judgment**: Lateral is the antidote to "when all you have is a hammer, everything looks like a nail." When you clearly know "when to use this instead of that," you truly own the knowledge.
+
+**Example**:
+
+```
+Attention Mechanism vs Competitors
+  ┌──────────────────┬──────────┬──────────┬──────────┐
+  │                  │Attention │ RNN/LSTM │   CNN    │
+  ├──────────────────┼──────────┼──────────┼──────────┤
+  │ Long-range deps  │ ★★★★★ │   ★★★  │   ★★   │
+  │ Parallel compute │ ★★★★★ │   ★     │  ★★★★ │
+  │ Compute cost     │ O(n²) high│  O(n) low│  O(n) low│
+  │ Interpretability │   High   │   Low    │  Medium  │
+  └──────────────────┴──────────┴──────────┴──────────┘
+  Moat: Global context awareness + parallel training efficiency
+```
+
+#### ⑥ Opposite: Boundaries · Prohibitions · The Reverse
+
+**Core Question**: What is it NOT? In what scenarios is using it wrong? What are its failure conditions?
+
+**Molecularization Operations**:
+
+- Clarify the node's **applicable boundary conditions**
+- List **negative examples**: common misuse/overuse scenarios
+- Annotate **knowledge firewalls**: which similar concepts are easily confused
+
+> **The dividing line between experts and mediocrity**: "Knowing what something is NOT is more important than knowing what it IS."
+
+**Synthesis Judgment**: Opposite is the most likely to be skipped in 6+1, yet has the highest value density. AI-generated content almost never proactively tells you "when NOT to use it" — this is precisely one of the most irreplaceable contributions of human Thinking.
+
+**Example**:
+
+```
+Attention Mechanism ← Opposite Boundaries
+  ✗ Not applicable: ultra-long sequences (O(n²) cost makes it infeasible)
+  ✗ Not applicable: real-time edge inference (excessive memory footprint)
+  ✗ Common misuse: equating "attention mechanism" with "Transformer" (the latter is a larger architecture)
+  ✗ Common confusion: Self-Attention vs Cross-Attention (different target objects)
+  Firewall: attention weights ≠ causal explanation; correlation ≠ interpretability
+```
+
+#### ⑦ Associated Connections: Cross-domain Mapping · Metaphors · Random Walk
+
+**Core Question**: What completely different domains can this knowledge connect to? What metaphors can help understand or communicate it?
+
+**Molecularization Operations**:
+
+- Force at least **2 cross-domain associations** (jump outside the current domain)
+- Find **concrete metaphors** that significantly lower the barrier to understanding
+- Explore cross-domain application directions that may produce **innovative transfer**
+
+**Synthesis Judgment**: This is the "entropy increase" moment of the FAST model — uncertain, non-linear, but precisely the core moat of humans relative to AI. AI excels at intra-domain precise retrieval; the human brain excels at cross-domain random roaming. Combined, genuine insights emerge.
+
+**Example**:
+
+```
+Attention Mechanism ← Cross-domain Connections
+  → Cognitive Science: "Limited attention resource allocation" — how humans focus is also scarce resource scheduling
+  → Economics: Attention economy — the allocation logic of attention as scarce capital in the age of information overload
+  → Metaphor: Spotlight model — the attention mechanism is like a movable spotlight, not uniformly illuminating the entire stage
+  → Transfer Application: User-item Cross-Attention architecture in recommendation systems
+```
+
+### 6+1 Synthesis Process: The Execution Rhythm of Molecularization
+
+```
+Input: A knowledge node (atom)
          ↓
-  [Step 1] Superior：找到父节点，完成锚定
+  [Step 1] Superior: Find parent node, complete anchoring
          ↓
-  [Step 2] Inferior：铺平第一层子结构（二八定律筛选）
+  [Step 2] Inferior: Lay out first-layer sub-structure (filter with 80/20 rule)
          ↓
-  [Step 3] Backward：追溯历史前驱与痛点
+  [Step 3] Backward: Trace historical predecessors and pain points
          ↓
-  [Step 4] Forward：标记演化方向与替代候选
+  [Step 4] Forward: Mark evolutionary direction and replacement candidates
          ↓
-  [Step 5] Lateral：对比竞品，提炼护城河
+  [Step 5] Lateral: Compare competitors, distill the moat
          ↓
-  [Step 6] Opposite：划定边界，设置防火墙
+  [Step 6] Opposite: Define boundaries, set firewalls
          ↓
-  [Step 7] Associated：跨域漫游，激发洞见
+  [Step 7] Associated: Cross-domain roaming, spark insights
          ↓
-输出：一个完整的 FAST 分子笔记（知识网节点）
+Output: A complete FAST molecular note (knowledge network node)
 ```
 
-**关键节奏原则**：
+**Key Rhythm Principles**:
 
-- **不要并行**：按顺序遍历，每个维度强制完成后再进入下一个
-- **不要跳过**：即使某维度"暂时没有答案"，也要显式标注 `[待填]`——空白本身就是有价值的元信息
-- **不要过深**：每个维度控制在 **5-10 个信息节点**以内，超出的部分另建子分子笔记
-- **人工审核关口**：Backward 和 Opposite 两个维度必须由人脑主导，AI 只做辅助——这是真实性和正确性的最后防线
+- **No parallelism**: traverse in order, complete each dimension before moving to the next
+- **No skipping**: even if a dimension "temporarily has no answer," explicitly annotate `[TBD]` — the blank itself is valuable meta-information
+- **No over-depth**: keep each dimension within **5–10 information nodes**; anything beyond that should become a separate child molecular note
+- **Human Review Checkpoints**: The Backward and Opposite dimensions must be led by human Thinking, with AI only assisting — these are the last lines of defense for authenticity and correctness
 
-### 分子化完成的验收标准
+### Acceptance Criteria for Completed Molecularization
 
-完成一个知识节点的 6+1 分子化之后，用以下三个问题自我验收：
+After completing the 6+1 molecularization of a knowledge node, use the following three questions to self-assess:
 
-|验收问题|对应维度|通过标准|
+| Assessment Question | Corresponding Dimensions | Pass Criteria |
 |---|---|---|
-|我能在 30 秒内说清楚它在整个知识体系中的位置吗？|Superior + Inferior|能清晰描述父节点和核心子结构|
-|我能举出 2 个"不该用它"的反例吗？|Opposite|能具体说出失效条件，而非泛泛而谈|
-|我能用一个领域外的隐喻解释它吗？|Associated|能让一个完全陌生的人在 1 分钟内产生直觉理解|
+| Can I explain its position within the entire knowledge system in 30 seconds? | Superior + Inferior | Can clearly describe the parent node and core sub-structure |
+| Can I give 2 examples of "when NOT to use it"? | Opposite | Can specifically state failure conditions, not just vague generalizations |
+| Can I explain it with a metaphor from outside the domain? | Associated | Can give a complete newcomer an intuitive grasp within 1 minute |
 
-**三个标准全部通过 → 分子化完成，可进入认知坍缩阶段。**
+**All three criteria passed → Molecularization complete, ready to enter the cognitive collapse stage.**
 
-> FAST 笔记的质量上限，由 6+1 遍历的完整度决定。投入这一步的时间，是整个流程中回报率最高的时间。
+> The quality ceiling of a FAST note is determined by the completeness of the 6+1 traversal. The time invested in this step has the highest ROI in the entire workflow.

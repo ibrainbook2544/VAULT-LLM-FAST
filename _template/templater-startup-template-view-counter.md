@@ -16,6 +16,7 @@ const EXCLUDE_EXACT_PATHS = new Set([
 ]);
 
 const EXCLUDE_FOLDERS = [
+  "_doc/",
   "_template/",
   "_attachment/",
   "logs/",
