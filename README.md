@@ -31,6 +31,7 @@ Over the past few decades, knowledge workers have relied on two dimensions to ma
 
 The two systems look complete, yet the bottleneck always lands in the same place — **the human**.
 
+
 ### Squeezed by Two Forces
 
 The traditional paradigm is being torn apart by two forces at once.
@@ -38,6 +39,7 @@ The traditional paradigm is being torn apart by two forces at once.
 First, **human inertia**: recording, organizing, linking, and archiving each continuously drain willpower. The more elaborate the system, the higher the maintenance cost. The fate of most knowledge bases is "built diligently, used carelessly, abandoned in the end."
 
 Second, **the runaway nature of knowledge itself**: information swells exponentially, disciplines cross-pollinate and iterate faster, and any field's "latest understanding" is rapidly replaced by new knowledge within a few months.
+
 
 ### The AI Era: [Andrej Karpathy's LLM Wiki Paradigm](https://karpathy.github.io/)
 
@@ -62,6 +64,7 @@ The traditional `LLM-Wiki` focuses only on knowledge itself, and not on the cogn
 5. **Cannot fully preserve conversations with the AI.**
    The `LLM-Wiki` LOG contains only some simple operational information and lacks complete contextual content, which greatly hampers later review and retrospection.
 
+
 ### The Third Evolution: LLM-FAST
 
 **LLM-FAST** is a combined **Personal Knowledge Management system** + **Knowledge Organization Structure** (**PKM** + **KOS**) aimed at individuals / small teams:
@@ -71,6 +74,7 @@ The traditional `LLM-Wiki` focuses only on knowledge itself, and not on the cogn
 - On the **KOS** side, it adopts a three-dimensional hierarchical directory structure (addressing `LLM-Wiki` #1), and also integrates **Clippings**, **Inbox (quick notes)**, and **Diary** (addressing `LLM-Wiki` #2), while adding multiple Obsidian plugins, scripts, and templates I developed myself — such as **Spaced-Review Reminder (SR Reminder)**, the **spaced-review evaluation script (sr-evaluate.js)**, and **TASK automated script reminders (Shell Reminder)** (addressing `LLM-Wiki` #4) — and finally the **AI conversation logging script (conversation-logger.js)** (addressing `LLM-Wiki` #5).
 
 Therefore, `LLM-FAST` does not merely **mount** knowledge onto a hierarchical knowledge tree; it lets you **actively focus** and, moreover, gives you the chance to be **passively reminded to review and reflect**.
+
 
 ---
 
@@ -106,6 +110,7 @@ Therefore, `LLM-FAST` does not merely **mount** knowledge onto a hierarchical kn
   - [Acknowledgements](#acknowledgements)
   - [License](#license)
 
+
 ---
 
 ## Core Features
@@ -121,17 +126,16 @@ Therefore, `LLM-FAST` does not merely **mount** knowledge onto a hierarchical kn
 - **Health checks**: `/sr-lint`, `/diary-lint`, and `/task-lint` only report problems such as dead links, conflicts, orphan files, and schema violations; they do not fix them automatically.
 - **AI conversation logging script (conversation-logger.js)**: fully records conversations with the AI, which you can also quickly categorize and organize for easy future search and retrospection.
 
+
 ---
 
 ## System Composition
-
----
 
 ### AI Agent
 
 - [Codex](https://chatgpt.com/codex), [Claude Code](https://claude.ai/code): the "knowledge compiler." See [`AGENTS.md`](AGENTS.md) for AI behavior specifications.
 
----
+
 ### Skills
 
 - `skill-creator`
@@ -139,7 +143,7 @@ Therefore, `LLM-FAST` does not merely **mount** knowledge onto a hierarchical kn
 - llm-wiki-skills: llm-wiki-init, llm-wiki-ingest, llm-wiki-lint, etc.
 - llm-fast-skills
 
----
+
 ### Scripts
 
 | File                               | Purpose                             |
@@ -147,7 +151,7 @@ Therefore, `LLM-FAST` does not merely **mount** knowledge onto a hierarchical kn
 | `_scripts/sr-evaluate.js`        | After an SR button rating, writes back to frontmatter and jumps to the next card |
 | `_scripts/conversation-logger.js` | AI conversation logging script; automatically saves the full conversation into `logs/`    |
 
----
+
 ### OB Plugins
 
 | Plugin                            | Purpose                                 |
@@ -165,7 +169,7 @@ Therefore, `LLM-FAST` does not merely **mount** knowledge onto a hierarchical kn
 | `Obsidian Daily Notes`        | OB daily notes                              |
 | `Obsidian Calendar`           | OB calendar                              |
 
----
+
 ### OB Templates
 
 | Template                                                  | Purpose                                            |
@@ -176,7 +180,7 @@ Therefore, `LLM-FAST` does not merely **mount** knowledge onto a hierarchical kn
 | `_template/Task Template`                           | Template for creating tasks via QuickAdd; applicable to any page                      |
 | `_template/templater-startup-template-view-counter` | Templater startup-script template; automatically increments the view count after opening a page (15-second debounce dwell by default) |
 
----
+
 ### Dashboard / Base: The View Layer
 
 **Dashboards**:
@@ -195,6 +199,7 @@ Therefore, `LLM-FAST` does not merely **mount** knowledge onto a hierarchical kn
 | [`sr.base`](sr.base) | Vault-wide notes carrying `sr_next_review_datetime`, excluding `_template/` | Vault-wide SR review queue |
 | [`DIARY/diary.base`](DIARY/diary.base) | `type: diary` + `subtype: card` directly under `DIARY` | DIARY atomic-card view |
 | [`TASK/task.base`](TASK/task.base) | `type: task` directly under `TASK` | Task view |
+
 
 ---
 
@@ -254,11 +259,10 @@ README.md                    # Documentation
 Note: One-click memory card (Card) creation — on any page you can select key content with the mouse and quickly create one via QuickAdd.
 ```
 
+
 ---
 
 ## Core Functions
-
----
 
 ### Inbox (Quick Notes)
 
@@ -286,7 +290,7 @@ Supports input anytime, anywhere, including voice memos:
 - Paid option: `OB Sync` (official, stable)
 - Free option: `Syncthing` (direct LAN connection, zero cost)
 
----
+
 ### Diary: The Process & Memory Layer
 
 It uses a two-layer model; all files lie flat under the `DIARY/` root, distinguished by `frontmatter`:
@@ -304,7 +308,7 @@ Key entry points:
 - [`_template/Diary Card Templater.md`](_template/Diary%20Card%20Templater.md): the atomic-card template, with built-in SR buttons.
 
 
----
+
 ### [Best Practice] Filter · Categorize · Locate & Mount
 
  🔍 **Filter**
@@ -328,7 +332,7 @@ For files worth organizing in depth (such as clipping files), proceed as follows
 2. Create a **FAST Molecular Notebook**
 3. Move the raw file into `raw/`
 
----
+
 ### Ingest — Atomization & Analysis
 
 Each `FAST-*` is a **molecular notebook** that internally follows the `LLM-Wiki` structure:
@@ -357,7 +361,7 @@ Typical ingest workflow:
 5. Update `wiki/index.md`.
 6. When necessary, generate `synthesis/` or `outputs/`.
 
----
+
 ### [Best Practice] Fact-Check, Conflict Resolution, Health Check (Lint)
 
 Once the `Ingest` workflow finishes, the notebook is not in a "finished state" — the raw material itself may contain errors or outdated information, or contradict existing concept nodes. Therefore, after each **ingestion** a round of **three-layer validation** must be performed.
@@ -370,14 +374,14 @@ Once the `Ingest` workflow finishes, the notebook is not in a "finished state" �
 
 The three-layer validation together safeguards the notebook's **signal-to-noise ratio** — what is **ingested** is not merely information, but verified, self-consistent knowledge.
 
----
+
 ### `FAST 6+1` Dimensional Expansion — Molecularization & Synthesis
 
 > Note: this step is the most important! It is the core step of `LLM-FAST`. It determines whether the entire **FAST Molecular Notebook** possesses **authenticity**, **correctness**, and **completeness**.
 
 For details, see: [FAST (Full Area Stack Tree)](_doc/FAST（Full%20Area%20Stack%20Tree）.md)
 
----
+
 ### Knowledge-Tree Roaming: Half-Random Walk — Active Review
 
 **Random Walk** is a classic method in the **Personal Knowledge Management (PKM)** field for active review and memory consolidation. Although `Obsidian` has a built-in `Random Walk` feature, its fully random nature often falls short when facing a massive number of notes — low hit rate, poor review efficiency — failing to meet the needs of systematic knowledge management.
@@ -388,7 +392,7 @@ For details, see: [FAST (Full Area Stack Tree)](_doc/FAST（Full%20Area%20Stack%
 
 A weighting mechanism is introduced when selecting nodes: the lower a note's `view count` and the higher its `importance`, the greater its probability of being selected. This means the system preferentially guides you toward those "important but long-unrevisited" knowledge nodes, making every roam more valuable.
 
----
+
 ### Memory Cards & Spaced-Review Reminder (SR Reminder) — Passive Review
 
 Core goal: let knowledge worth retaining long-term resurface at the right moments along the **Ebbinghaus forgetting curve**, trading the minimum review cost for the deepest memory retention.
@@ -428,7 +432,7 @@ Button 5 (round complete, advance across days):
 
 On any page, select key content with the mouse and create a memory card in one click via `QuickAdd` — effortless, zero-friction capture.
 
----
+
 ### The Three Task Subtypes
 
 `LLM-FAST` subdivides tasks into three subtypes, covering the full execution chain from **manual** to **scheduled automation**, to meet task-management needs across different scenarios.
@@ -477,7 +481,7 @@ The most automated of the three task types. Building on `reminder`, it further b
 
 > **Selection advice**: use `todo` for items with no time pressure; use `reminder` for items that need a timed nudge but still require manual handling; use `shell` for repetitive operations that can be fully scripted with no human intervention.
 
----
+
 ### Log Archiving (Logs)
 
 `LLM-FAST` has a complete built-in log-archiving system that brings both **daily activity records** and **AI conversation records** under unified management in the `logs/` directory, forming a searchable, reviewable personal knowledge trail.
@@ -508,6 +512,7 @@ Log filenames support two formats:
 
 > **Example use case**: while debugging a script, you repeatedly confirm the logic with the AI; after the conversation it is automatically archived as `2026-05-18 143022 Debug backup.sh`, and next time you hit a similar problem you can search the logs to find the complete solving process.
 
+
 ---
 ## Prerequisites
 
@@ -517,6 +522,7 @@ Log filenames support two formats:
 | [Git](https://git-scm.com/)           | ≥ 2.30 | Version control     |
 | [Claude Code](https://claude.ai/code) | Latest     | AI compilation & maintenance |
 | [Codex](https://chatgpt.com/codex)    | Latest     | AI compilation & maintenance |
+
 
 ---
 ## Installation
@@ -533,10 +539,12 @@ cd LLM-FAST
 #    Settings → Community plugins → enable the required plugins
 ```
 
+
 ---
 ## Configuration
 
 > Note: the Git repository already includes all OB plugins, templates, scripts, and related configuration — it even retains development logs and some core **FAST Molecular Notebooks** — which you may modify and pick and choose as you like.
+
 
 ---
 ## Common Commands & Workflows
@@ -550,6 +558,7 @@ cd LLM-FAST
 | `/todo-lint` | TASK health check; reports only, no auto-fix |
 | `/llm-wiki-init` | Initialize a new FAST / LLM Wiki structure |
 
+
 ---
 ## Best Practices
 
@@ -560,6 +569,7 @@ While browsing the web day to day, I casually add nice, save-worthy, or worth-st
 > **Note**: don't create folders in the bookmarks bar! Just put them at the top level so they stand out the most.
 
 The bookmarks bar inherently carries the psychological pressure of "an eyesore that's uncomfortable until cleared," and this sense of urgency is the drive behind organizing — use it well. Bookmarks need no extra reminder; the visual pressure is itself the reminder.
+
 
 ### 1. Clippings — Land First, Organize Later, Set a Reminder
 
@@ -574,6 +584,7 @@ Clipping is the first gate through which knowledge flows into the system; the co
 
 > Tip: if the reminder time has no date and only a time, it means the reminder fires at that time every day.
 
+
 ### 2. Locate & Mount
 
 Once the reminder fires, I formally begin organizing. The core of this step is: **mount new knowledge onto a clearly layered knowledge tree to avoid forming knowledge islands.**
@@ -582,6 +593,7 @@ Once the reminder fires, I formally begin organizing. The core of this step is: 
 2. Create a **FAST Molecular Notebook** under that node (folder name being the domain name in slug format);
 3. Run `/llm-wiki-init` to have the LLM initialize and generate the Wiki architecture;
 4. Move the clipping file into `raw/` and clear the corresponding entry in the original `INBOX/Clippings/`.
+
 
 ### 3. Ingest — Atomization & Analysis
 
@@ -595,6 +607,7 @@ Run `ingest`; the AI reads the raw material in full and automatically generates:
 
 - ⚠️ Confirm that images, attachments, and other resources have been correctly loaded into `asset/`, to avoid broken links later.
 
+
 ### 4. Health Check (Lint)
 
 Once `Ingest` is done, the notebook has not yet entered a "trustworthy state." Run `lint` to perform three-layer validation:
@@ -605,9 +618,11 @@ Once `Ingest` is done, the notebook has not yet entered a "trustworthy state." R
 
 Only after handling all reported issues is the notebook considered fully ingested.
 
+
 ### 5. Generate FAST Molecular Notes
 
 Based on the `concepts/` and `entities/` that have passed Lint validation, run the `FAST 6+1` dimensional expansion to complete the **molecularization & synthesis** process, generating molecular notes that are structurally complete and logically self-consistent.
+
 
 ### 6. Think, Synthesize & Produce (finally, create a memory card)
 
@@ -617,6 +632,7 @@ Once the molecular notebook has accumulated a certain density, begin to actively
 
 - For the FAST or its important pages, **create a memory card** in the diary and bring it into the spaced-review (SR) flow, to prevent newly ingested knowledge from being forgotten right after ingestion.
 
+
 ### 7. Weekly Retrospective: Half-Random Walk + AI Insight
 
 Trigger a retrospective workflow regularly each week:
@@ -624,6 +640,7 @@ Trigger a retrospective workflow regularly each week:
 - **Half-random walk**: the system preferentially recommends "important but long-unrevisited" knowledge nodes, reactivating dormant memory;
 - **AI insight**: leverage the LLM to discover blind spots, latent connections, and new learning directions in the knowledge base;
 - **Start a new cycle**: let insight drive a new round of the closed loop of clipping (capture) and thinking (output).
+
 
 ---
 
@@ -638,14 +655,14 @@ This repository is primarily a personal knowledge base and, in principle, does n
 - Open an `Issue` to discuss the **FAST** methodology;
 - Fork it and build your own `LLM-FAST`.
 
----
+
 ### Acknowledgements
 
 - [Andrej Karpathy](https://karpathy.github.io/): inspiration for the `LLM Wiki` paradigm
 - **Tiago Forte**: Second Brain `CODE (Capture-Organize-Distill-Express)`
 - **Zettelkasten**: `Fleeting → Literature → Permanent`
 
----
+
 ### License
 
 This repository's **structure, templates, scripts, plugins, and AI behavior specifications** (such as `AGENTS.md`, `CLAUDE.md`, `_template/`, `_scripts/`, `.obsidian/plugins/`, `*.base`) are licensed under the [MIT License](LICENSE).
