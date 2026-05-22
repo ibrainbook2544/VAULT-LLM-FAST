@@ -1,8 +1,8 @@
 {
   "userName": "",
   "permissionMode": "yolo",
-  "model": "opus",
-  "thinkingBudget": "medium",
+  "model": "sonnet",
+  "thinkingBudget": "low",
   "effortLevel": "high",
   "serviceTier": "default",
   "enableAutoTitleGeneration": true,
@@ -32,7 +32,7 @@
       "enableOpus1M": false,
       "enableSonnet1M": false,
       "customModels": "",
-      "lastModel": "opus",
+      "lastModel": "sonnet",
       "environmentVariables": "",
       "environmentHash": ""
     },
@@ -59,12 +59,13 @@
       "modelAliases": {},
       "preferredThinkingByModel": {},
       "selectedMode": "",
+      "thinkingOptionsByModel": {},
       "visibleModels": []
     }
   },
   "settingsProvider": "claude",
   "savedProviderModel": {
-    "claude": "opus",
+    "claude": "sonnet",
     "codex": "gpt-5.5"
   },
   "savedProviderEffort": {
@@ -75,7 +76,7 @@
     "codex": "default"
   },
   "savedProviderThinkingBudget": {
-    "claude": "medium",
+    "claude": "low",
     "codex": "off"
   },
   "savedProviderPermissionMode": {
